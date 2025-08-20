@@ -1,4 +1,4 @@
-# Duke User Guide
+# Yoyo User Guide
 
 // Update the title above to match the actual product name
 
