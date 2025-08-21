@@ -1,15 +1,15 @@
-task1
-task2
-list
+todo read book
+deadline return book /by June 6th
+event project meeting /from Aug 6th 2pm /to 4pm
+todo join sports club
 mark 1
-list
-mark 1
-list
-mark 2
-list
-unmark 1
-list
-task3
+mark 4
 mark 3
 list
+unmark 3
+todo borrow book
+list
+deadline return book /by Sunday
+event project meeting /from Mon 2pm /to 4pm
+deadline do homework /by no idea :-p
 bye

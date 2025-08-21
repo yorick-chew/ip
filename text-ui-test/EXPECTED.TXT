@@ -3,63 +3,77 @@
     What can I do for you?
     ========================================================
     ========================================================
-    added: task1
+    Alright-y, I've added your task:
+       [T][ ] read book
+    Now you have 1 tasks in the list.
     ========================================================
     ========================================================
-    added: task2
+    Alright-y, I've added your task:
+       [D][ ] return book (by: June 6th)
+    Now you have 2 tasks in the list.
     ========================================================
     ========================================================
-    1. [ ] task1
-    2. [ ] task2
+    Alright-y, I've added your task:
+       [E][ ] project meeting (from: Aug 6th 2pm to: 4pm)
+    Now you have 3 tasks in the list.
     ========================================================
     ========================================================
-    Oh man, you're clearing them tasks like a pro!
-    Marked it for you:
-       [X] task1
-    ========================================================
-    ========================================================
-    1. [X] task1
-    2. [ ] task2
-    ========================================================
-    ========================================================
-    Oh man, you're clearing them tasks like a pro!
-    Marked it for you:
-       [X] task1
-    ========================================================
-    ========================================================
-    1. [X] task1
-    2. [ ] task2
+    Alright-y, I've added your task:
+       [T][ ] join sports club
+    Now you have 4 tasks in the list.
     ========================================================
     ========================================================
     Oh man, you're clearing them tasks like a pro!
     Marked it for you:
-       [X] task2
+       [T][X] read book
     ========================================================
     ========================================================
-    1. [X] task1
-    2. [X] task2
+    Oh man, you're clearing them tasks like a pro!
+    Marked it for you:
+       [T][X] join sports club
+    ========================================================
+    ========================================================
+    Oh man, you're clearing them tasks like a pro!
+    Marked it for you:
+       [E][X] project meeting (from: Aug 6th 2pm to: 4pm)
+    ========================================================
+    ========================================================
+    1. [T][X] read book
+    2. [D][ ] return book (by: June 6th)
+    3. [E][X] project meeting (from: Aug 6th 2pm to: 4pm)
+    4. [T][X] join sports club
     ========================================================
     ========================================================
     Bruh... Alright fine, I won't judge!
     Unmarked it for you:
-       [ ] task1
+       [E][ ] project meeting (from: Aug 6th 2pm to: 4pm)
     ========================================================
     ========================================================
-    1. [ ] task1
-    2. [X] task2
+    Alright-y, I've added your task:
+       [T][ ] borrow book
+    Now you have 5 tasks in the list.
     ========================================================
     ========================================================
-    added: task3
+    1. [T][X] read book
+    2. [D][ ] return book (by: June 6th)
+    3. [E][ ] project meeting (from: Aug 6th 2pm to: 4pm)
+    4. [T][X] join sports club
+    5. [T][ ] borrow book
     ========================================================
     ========================================================
-    Oh man, you're clearing them tasks like a pro!
-    Marked it for you:
-       [X] task3
+    Alright-y, I've added your task:
+       [D][ ] return book (by: Sunday)
+    Now you have 6 tasks in the list.
     ========================================================
     ========================================================
-    1. [ ] task1
-    2. [X] task2
-    3. [X] task3
+    Alright-y, I've added your task:
+       [E][ ] project meeting (from: Mon 2pm to: 4pm)
+    Now you have 7 tasks in the list.
+    ========================================================
+    ========================================================
+    Alright-y, I've added your task:
+       [D][ ] do homework (by: no idea :-p)
+    Now you have 8 tasks in the list.
     ========================================================
     ========================================================
     Aww, bye! See ya later.
