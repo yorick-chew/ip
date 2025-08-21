@@ -15,8 +15,14 @@ deadline do homework /by no idea :-p
 blah
 mark
 unmark
+mark -1
 todo
 deadline /by 6pm
 event x /fromx /to x
 event x /from   /to
+delete
+list
+delete 3
+list
+
 bye

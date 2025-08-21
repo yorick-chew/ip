@@ -86,6 +86,9 @@
     Umm... You've entered an invalid task number.
     ========================================================
     ========================================================
+    Umm... You've entered an invalid task number.
+    ========================================================
+    ========================================================
     Umm... The description of a todo cannot be empty.
     ========================================================
     ========================================================
@@ -99,6 +102,33 @@
     ========================================================
     Umm... The description, from date and to date
     of an event cannot be empty.
+    ========================================================
+    ========================================================
+    Umm... You've entered an invalid task number.
+    ========================================================
+    ========================================================
+    1. [T][X] read book
+    2. [D][ ] return book (by: June 6th)
+    3. [E][ ] project meeting (from: Aug 6th 2pm to: 4pm)
+    4. [T][X] join sports club
+    5. [T][ ] borrow book
+    6. [D][ ] return book (by: Sunday)
+    7. [E][ ] project meeting (from: Mon 2pm to: 4pm)
+    8. [D][ ] do homework (by: no idea :-p)
+    ========================================================
+    ========================================================
+    Gotcha, it's gone! I've deleted this task:
+    [E][ ] project meeting (from: Aug 6th 2pm to: 4pm)
+    Now you have 7 tasks in the list.
+    ========================================================
+    ========================================================
+    1. [T][X] read book
+    2. [D][ ] return book (by: June 6th)
+    3. [T][X] join sports club
+    4. [T][ ] borrow book
+    5. [D][ ] return book (by: Sunday)
+    6. [E][ ] project meeting (from: Mon 2pm to: 4pm)
+    7. [D][ ] do homework (by: no idea :-p)
     ========================================================
     ========================================================
     Aww, bye! See ya later.

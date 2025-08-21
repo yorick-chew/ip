@@ -1,44 +1,35 @@
+import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class Yoyo {
-    private static Task[] taskLst = new Task[100];
-    private static int currIdx = 0;
+    private static ArrayList<Task> taskLst = new ArrayList<>();
 
-    private static String addTask(String description) throws MaxNumOfTasksException {
-        if (Yoyo.numOfTasks() == Yoyo.taskLst.length) {
-            // If the number of tasks being tracked is already the list's maximum
-            // then raise an exception
-            throw new MaxNumOfTasksException();
-        }
+    private static String addTask(String description) {
         ToDo newToDo = new ToDo(description);
-        taskLst[currIdx] = newToDo;
-        currIdx++;
+        taskLst.add(newToDo);
         return newToDo.toString();
     }
 
-    private static String addTask(String description, String by) throws MaxNumOfTasksException {
-        if (Yoyo.numOfTasks() == Yoyo.taskLst.length) {
-            // If the number of tasks being tracked is already the list's maximum
-            // then raise an exception
-            throw new MaxNumOfTasksException();
-        }
+    private static String addTask(String description, String by) {
         Deadline newDeadline = new Deadline(description, by);
-        taskLst[currIdx] = newDeadline;
-        currIdx++;
+        taskLst.add(newDeadline);
         return newDeadline.toString();
     }
 
-    private static String addTask(String description, String from, String to) throws MaxNumOfTasksException {
-        if (Yoyo.numOfTasks() == Yoyo.taskLst.length) {
-            // If the number of tasks being tracked is already the list's maximum
-            // then raise an exception
-            throw new MaxNumOfTasksException();
-        }
+    private static String addTask(String description, String from, String to) {
         Event newEvent = new Event(description, from, to);
-        taskLst[currIdx] = newEvent;
-        currIdx++;
+        taskLst.add(newEvent);
         return newEvent.toString();
+    }
+
+    private static String removeTask(int taskNum) throws InvalidTaskException {
+        if (taskNum <= 0 || taskNum > Yoyo.numOfTasks()) {
+            throw new InvalidTaskException();
+        }
+        int taskIdx = taskNum - 1;
+        Task task = Yoyo.taskLst.remove(taskIdx);
+        return task.toString();
     }
 
     private static String markAsDone(int taskNum) throws InvalidTaskException {
@@ -46,7 +37,7 @@ public class Yoyo {
             throw new InvalidTaskException();
         }
         int taskIdx = taskNum - 1;
-        Task task = Yoyo.taskLst[taskIdx];
+        Task task = Yoyo.taskLst.get(taskIdx);
         task.markAsDone();
         return task.toString();
     }
@@ -56,13 +47,13 @@ public class Yoyo {
             throw new InvalidTaskException();
         }
         int taskIdx = taskNum - 1;
-        Task task = Yoyo.taskLst[taskIdx];
+        Task task = Yoyo.taskLst.get(taskIdx);
         task.unmarkAsDone();
         return task.toString();
     }
 
     private static int numOfTasks() {
-        return currIdx;
+        return Yoyo.taskLst.size();
     }
 
     public static void main(String[] args) {
@@ -94,10 +85,8 @@ public class Yoyo {
                 } else if (command.equals("list")) {
                     // Yoyo lists out what it wrote in its list
                     System.out.println(tab + separator);
-                    for (int idx = 0; idx < Yoyo.taskLst.length; idx++) {
-                        if (idx < currIdx) {
-                            System.out.println(tab + (idx + 1) + ". " + Yoyo.taskLst[idx]);
-                        }
+                    for (int idx = 0; idx < Yoyo.numOfTasks(); idx++) {
+                        System.out.println(tab + (idx + 1) + ". " + Yoyo.taskLst.get(idx));
                     }
                     System.out.println(tab + separator);
                 } else if (command.equals("mark")) {
@@ -120,6 +109,18 @@ public class Yoyo {
                         System.out.println(tab + "Bruh... Alright fine, I won't judge!\n" +
                                 tab + "Unmarked it for you:\n" + tab + "   " +
                                 taskString);
+                        System.out.println(tab + separator);
+                    } catch (NoSuchElementException e) {
+                        throw new InvalidTaskException();
+                    }
+                } else if (command.equals("delete")) {
+                    try {
+                        int taskNum = commandScanner.nextInt();
+                        String taskString = Yoyo.removeTask(taskNum);
+                        System.out.println(tab + separator);
+                        System.out.println(tab + "Gotcha, it's gone! I've deleted this " +
+                                "task:\n" + tab + taskString + "\n" + tab + "Now you have "
+                                + Yoyo.numOfTasks() + " tasks in the list.");
                         System.out.println(tab + separator);
                     } catch (NoSuchElementException e) {
                         throw new InvalidTaskException();
@@ -197,12 +198,6 @@ public class Yoyo {
                     // The user's prompt is not preceded by a valid command
                     throw new UnknownCommandException();
                 }
-            } catch (MaxNumOfTasksException e) {
-                System.out.println(tab + separator);
-                System.out.println(tab + "Umm... I didn't want to say this but... " +
-                        "You've reached\n" + tab + "the maximum number of tasks " +
-                        "that I can track...");
-                System.out.println(tab + separator);
             } catch (InvalidTaskException e) {
                 System.out.println(tab + separator);
                 System.out.println(tab + "Umm... You've entered an invalid task " +
