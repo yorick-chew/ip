@@ -2,8 +2,36 @@ import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+import java.io.IOException;
+import java.io.File;
+
 public class Yoyo {
     private static ArrayList<Task> taskLst = new ArrayList<>();
+    private static File memory;
+
+    public Yoyo() {
+        // Set up and check for chatbot memory
+        String separator = "=========================" +
+                "===============================";
+        String tab = "    ";
+        try {
+            File dataDir = new File("data");
+            dataDir.mkdir();
+            if (!(dataDir.exists())) {
+                throw new MissingMemoryException();
+            }
+            File memory = new File("data/memory.txt");
+            memory.createNewFile();
+            this.memory = memory;
+        } catch (IOException | MissingMemoryException e) {
+            System.out.println(tab + separator);
+            System.out.println(tab + "Uh-oh... I'm having amnesia! I can't save " +
+                    "any past\n" + tab + "or future data you give me because of a " +
+                    "system problem.\n" + tab + "I recommend that you reboot me and " +
+                    "see if it fixes me!");
+            System.out.println(tab + separator);
+        }
+    }
 
     public void run() {
         // Begin running Yoyo's interactions
