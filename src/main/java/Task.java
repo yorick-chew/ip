@@ -19,6 +19,10 @@ public class Task {
         this.isDone = false;
     }
 
+    public String getSaveString() {
+        return Boolean.toString(this.isDone) + "|" + description;
+    }
+
     public String toString() {
         return "[" + this.getStatusIcon() + "] " + description;
     }
