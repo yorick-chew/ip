@@ -5,58 +5,8 @@ import java.util.Scanner;
 public class Yoyo {
     private static ArrayList<Task> taskLst = new ArrayList<>();
 
-    private static String addTask(String description) {
-        ToDo newToDo = new ToDo(description);
-        taskLst.add(newToDo);
-        return newToDo.toString();
-    }
-
-    private static String addTask(String description, String by) {
-        Deadline newDeadline = new Deadline(description, by);
-        taskLst.add(newDeadline);
-        return newDeadline.toString();
-    }
-
-    private static String addTask(String description, String from, String to) {
-        Event newEvent = new Event(description, from, to);
-        taskLst.add(newEvent);
-        return newEvent.toString();
-    }
-
-    private static String removeTask(int taskNum) throws InvalidTaskException {
-        if (taskNum <= 0 || taskNum > Yoyo.numOfTasks()) {
-            throw new InvalidTaskException();
-        }
-        int taskIdx = taskNum - 1;
-        Task task = Yoyo.taskLst.remove(taskIdx);
-        return task.toString();
-    }
-
-    private static String markAsDone(int taskNum) throws InvalidTaskException {
-        if (taskNum <= 0 || taskNum > Yoyo.numOfTasks()) {
-            throw new InvalidTaskException();
-        }
-        int taskIdx = taskNum - 1;
-        Task task = Yoyo.taskLst.get(taskIdx);
-        task.markAsDone();
-        return task.toString();
-    }
-
-    private static String unmarkAsDone(int taskNum) throws InvalidTaskException {
-        if (taskNum <= 0 || taskNum > Yoyo.numOfTasks()) {
-            throw new InvalidTaskException();
-        }
-        int taskIdx = taskNum - 1;
-        Task task = Yoyo.taskLst.get(taskIdx);
-        task.unmarkAsDone();
-        return task.toString();
-    }
-
-    private static int numOfTasks() {
-        return Yoyo.taskLst.size();
-    }
-
-    public static void main(String[] args) {
+    public void run() {
+        // Begin running Yoyo's interactions
         Scanner scanner = new Scanner(System.in);
         String separator = "=========================" +
                 "===============================";
@@ -228,5 +178,60 @@ public class Yoyo {
                 // command and do nothing
             }
         }
+    }
+
+    private static String addTask(String description) {
+        ToDo newToDo = new ToDo(description);
+        taskLst.add(newToDo);
+        return newToDo.toString();
+    }
+
+    private static String addTask(String description, String by) {
+        Deadline newDeadline = new Deadline(description, by);
+        taskLst.add(newDeadline);
+        return newDeadline.toString();
+    }
+
+    private static String addTask(String description, String from, String to) {
+        Event newEvent = new Event(description, from, to);
+        taskLst.add(newEvent);
+        return newEvent.toString();
+    }
+
+    private static String removeTask(int taskNum) throws InvalidTaskException {
+        if (taskNum <= 0 || taskNum > Yoyo.numOfTasks()) {
+            throw new InvalidTaskException();
+        }
+        int taskIdx = taskNum - 1;
+        Task task = Yoyo.taskLst.remove(taskIdx);
+        return task.toString();
+    }
+
+    private static String markAsDone(int taskNum) throws InvalidTaskException {
+        if (taskNum <= 0 || taskNum > Yoyo.numOfTasks()) {
+            throw new InvalidTaskException();
+        }
+        int taskIdx = taskNum - 1;
+        Task task = Yoyo.taskLst.get(taskIdx);
+        task.markAsDone();
+        return task.toString();
+    }
+
+    private static String unmarkAsDone(int taskNum) throws InvalidTaskException {
+        if (taskNum <= 0 || taskNum > Yoyo.numOfTasks()) {
+            throw new InvalidTaskException();
+        }
+        int taskIdx = taskNum - 1;
+        Task task = Yoyo.taskLst.get(taskIdx);
+        task.unmarkAsDone();
+        return task.toString();
+    }
+
+    private static int numOfTasks() {
+        return Yoyo.taskLst.size();
+    }
+
+    public static void main(String[] args) {
+        new Yoyo().run();
     }
 }
