@@ -4,10 +4,11 @@ import java.util.Scanner;
 
 import java.io.IOException;
 import java.io.File;
+import java.io.FileWriter;
 
 public class Yoyo {
-    private static ArrayList<Task> taskLst = new ArrayList<>();
-    private static File memory;
+    private ArrayList<Task> taskLst = new ArrayList<>();
+    private String filePath = "data/memory.txt";
 
     public Yoyo() {
         // Set up and check for chatbot memory
@@ -20,9 +21,34 @@ public class Yoyo {
             if (!(dataDir.exists())) {
                 throw new MissingMemoryException();
             }
-            File memory = new File("data/memory.txt");
+            File memory = new File(this.filePath);
             memory.createNewFile();
-            this.memory = memory;
+
+            // Fill up taskLst with saved memory
+            Scanner memoryScanner = new Scanner(memory);
+            memoryScanner.useDelimiter("\\|");
+            while (memoryScanner.hasNextLine()) {
+                String line = memoryScanner.nextLine();
+                String[] taskInfo = line.split("\\|");
+                String taskType = taskInfo[0];
+                boolean isMarked = Boolean.parseBoolean(taskInfo[1]);
+                String description = taskInfo[2];
+                Task newTask;
+                if (taskType.equals("T")) {
+                    newTask = new ToDo(description);
+                } else if (taskType.equals("D")) {
+                    String by = taskInfo[3];
+                    newTask = new Deadline(description, by);
+                } else {
+                    String from = taskInfo[3];
+                    String to = taskInfo[4];
+                    newTask = new Event(description, from, to);
+                }
+                if (isMarked) {
+                    newTask.markAsDone();
+                }
+                this.taskLst.add(newTask);
+            }
         } catch (IOException | MissingMemoryException e) {
             System.out.println(tab + separator);
             System.out.println(tab + "Uh-oh... I'm having amnesia! I can't save " +
@@ -63,14 +89,14 @@ public class Yoyo {
                 } else if (command.equals("list")) {
                     // Yoyo lists out what it wrote in its list
                     System.out.println(tab + separator);
-                    for (int idx = 0; idx < Yoyo.numOfTasks(); idx++) {
-                        System.out.println(tab + (idx + 1) + ". " + Yoyo.taskLst.get(idx));
+                    for (int idx = 0; idx < this.numOfTasks(); idx++) {
+                        System.out.println(tab + (idx + 1) + ". " + this.taskLst.get(idx));
                     }
                     System.out.println(tab + separator);
                 } else if (command.equals("mark")) {
                     try {
                         int taskNum = commandScanner.nextInt();
-                        String taskString = Yoyo.markAsDone(taskNum);
+                        String taskString = this.markAsDone(taskNum);
                         System.out.println(tab + separator);
                         System.out.println(tab + "Oh man, you're clearing them tasks" +
                                 " like a pro!\n" + tab + "Marked it for you:\n" +
@@ -82,7 +108,7 @@ public class Yoyo {
                 } else if (command.equals("unmark")) {
                     try {
                         int taskNum = commandScanner.nextInt();
-                        String taskString = Yoyo.unmarkAsDone(taskNum);
+                        String taskString = this.unmarkAsDone(taskNum);
                         System.out.println(tab + separator);
                         System.out.println(tab + "Bruh... Alright fine, I won't judge!\n" +
                                 tab + "Unmarked it for you:\n" + tab + "   " +
@@ -94,11 +120,11 @@ public class Yoyo {
                 } else if (command.equals("delete")) {
                     try {
                         int taskNum = commandScanner.nextInt();
-                        String taskString = Yoyo.removeTask(taskNum);
+                        String taskString = this.removeTask(taskNum);
                         System.out.println(tab + separator);
                         System.out.println(tab + "Gotcha, it's gone! I've deleted this " +
                                 "task:\n" + tab + taskString + "\n" + tab + "Now you have "
-                                + Yoyo.numOfTasks() + " tasks in the list.");
+                                + this.numOfTasks() + " tasks in the list.");
                         System.out.println(tab + separator);
                     } catch (NoSuchElementException e) {
                         throw new InvalidTaskException();
@@ -107,14 +133,15 @@ public class Yoyo {
                     // Yoyo adds a new to-do to its list
                     try {
                         String description = commandScanner.nextLine().substring(1);
-                        String taskString = Yoyo.addTask(description);
                         if (description.isEmpty()) {
                             throw new InvalidToDoException();
                         }
+                        String taskString = this.addTask(description);
+
                         System.out.println(tab + separator);
                         System.out.println(tab + "Alright-y, I've added your task:\n" +
                                 tab + "   " + taskString + "\n" + tab + "Now you have "
-                                + Yoyo.numOfTasks() + " tasks in the list.");
+                                + this.numOfTasks() + " tasks in the list.");
                         System.out.println(tab + separator);
                     } catch (NoSuchElementException e) {
                         throw new InvalidToDoException();
@@ -133,11 +160,11 @@ public class Yoyo {
                         if (by.isEmpty()) {
                             throw new InvalidDeadlineException();
                         }
-                        String taskString = Yoyo.addTask(description, by);
+                        String taskString = this.addTask(description, by);
                         System.out.println(tab + separator);
                         System.out.println(tab + "Alright-y, I've added your task:\n" +
                                 tab + "   " + taskString + "\n" + tab + "Now you have "
-                                + Yoyo.numOfTasks() + " tasks in the list.");
+                                + this.numOfTasks() + " tasks in the list.");
                         System.out.println(tab + separator);
                     } catch (NoSuchElementException e) {
                         throw new InvalidDeadlineException();
@@ -163,11 +190,11 @@ public class Yoyo {
                         if (to.isEmpty()) {
                             throw new InvalidEventException();
                         }
-                        String taskString = Yoyo.addTask(description, from, to);
+                        String taskString = this.addTask(description, from, to);
                         System.out.println(tab + separator);
                         System.out.println(tab + "Alright-y, I've added your task:\n" +
                                 tab + "   " + taskString + "\n" + tab + "Now you have "
-                                + Yoyo.numOfTasks() + " tasks in the list.");
+                                + this.numOfTasks() + " tasks in the list.");
                         System.out.println(tab + separator);
                     } catch (NoSuchElementException e) {
                         throw new InvalidEventException();
@@ -204,59 +231,84 @@ public class Yoyo {
             } catch (NoSuchElementException e) {
                 // User pressed enter without typing command. Wait for next
                 // command and do nothing
+            } catch (EditMemoryException e) {
+                System.out.println(tab + separator);
+                System.out.println(tab + "Uh-oh... My brain broke for a moment " +
+                        "there.\n" + tab + "I had a problem keeping track of all " +
+                        "your tasks.\n" + tab + "You may find that some tasks are not " +
+                        "properly saved\n" + tab + "when you reboot me...");
+                System.out.println(tab + separator);
             }
         }
     }
 
-    private static String addTask(String description) {
+    private void updateMemory() throws EditMemoryException {
+        try {
+            FileWriter fw = new FileWriter(this.filePath);
+            for (Task task : this.taskLst) {
+                fw.write(task.getSaveString() + System.lineSeparator());
+            }
+            fw.close();
+        } catch (IOException e) {
+            throw new EditMemoryException();
+        }
+    }
+
+    private String addTask(String description) throws EditMemoryException {
         ToDo newToDo = new ToDo(description);
-        taskLst.add(newToDo);
+        this.taskLst.add(newToDo);
+        this.updateMemory();
         return newToDo.toString();
     }
 
-    private static String addTask(String description, String by) {
+    private String addTask(String description, String by) throws EditMemoryException {
         Deadline newDeadline = new Deadline(description, by);
-        taskLst.add(newDeadline);
+        this.taskLst.add(newDeadline);
+        this.updateMemory();
         return newDeadline.toString();
     }
 
-    private static String addTask(String description, String from, String to) {
+    private String addTask(String description, String from, String to) throws EditMemoryException {
         Event newEvent = new Event(description, from, to);
-        taskLst.add(newEvent);
+        this.taskLst.add(newEvent);
+        this.updateMemory();
         return newEvent.toString();
     }
 
-    private static String removeTask(int taskNum) throws InvalidTaskException {
-        if (taskNum <= 0 || taskNum > Yoyo.numOfTasks()) {
+    private String removeTask(int taskNum) throws InvalidTaskException, EditMemoryException {
+        if (taskNum <= 0 || taskNum > this.numOfTasks()) {
             throw new InvalidTaskException();
         }
         int taskIdx = taskNum - 1;
-        Task task = Yoyo.taskLst.remove(taskIdx);
+        Task task = this.taskLst.remove(taskIdx);
+        this.updateMemory();
         return task.toString();
     }
 
-    private static String markAsDone(int taskNum) throws InvalidTaskException {
-        if (taskNum <= 0 || taskNum > Yoyo.numOfTasks()) {
+    private String markAsDone(int taskNum) throws InvalidTaskException, EditMemoryException {
+        if (taskNum <= 0 || taskNum > this.numOfTasks()) {
             throw new InvalidTaskException();
         }
         int taskIdx = taskNum - 1;
-        Task task = Yoyo.taskLst.get(taskIdx);
+        Task task = this.taskLst.get(taskIdx);
         task.markAsDone();
+        this.updateMemory();
         return task.toString();
     }
 
-    private static String unmarkAsDone(int taskNum) throws InvalidTaskException {
-        if (taskNum <= 0 || taskNum > Yoyo.numOfTasks()) {
+    private String unmarkAsDone(int taskNum) throws InvalidTaskException, EditMemoryException {
+        if (taskNum <= 0 || taskNum > this.numOfTasks()) {
             throw new InvalidTaskException();
         }
         int taskIdx = taskNum - 1;
-        Task task = Yoyo.taskLst.get(taskIdx);
+        Task task = this.taskLst.get(taskIdx);
         task.unmarkAsDone();
+        this.updateMemory();
         return task.toString();
     }
 
-    private static int numOfTasks() {
-        return Yoyo.taskLst.size();
+    private int numOfTasks() {
+        return this.taskLst.size();
     }
 
     public static void main(String[] args) {
