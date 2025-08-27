@@ -1,3 +1,5 @@
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -6,9 +8,13 @@ import java.io.IOException;
 import java.io.File;
 import java.io.FileWriter;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 public class Yoyo {
     private ArrayList<Task> taskLst = new ArrayList<>();
-    private String filePath = "data/memory.txt";
+    private final String filePath = "data/memory.txt";
+    private DateTimeFormatter parseFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     public Yoyo() {
         // Set up and check for chatbot memory
@@ -38,11 +44,14 @@ public class Yoyo {
                     newTask = new ToDo(description);
                 } else if (taskType.equals("D")) {
                     String by = taskInfo[3];
-                    newTask = new Deadline(description, by);
+                    LocalDateTime byDate = LocalDateTime.parse(by, this.parseFormatter);
+                    newTask = new Deadline(description, byDate);
                 } else {
                     String from = taskInfo[3];
                     String to = taskInfo[4];
-                    newTask = new Event(description, from, to);
+                    LocalDateTime fromDate = LocalDateTime.parse(from, this.parseFormatter);
+                    LocalDateTime toDate = LocalDateTime.parse(to, this.parseFormatter);
+                    newTask = new Event(description, fromDate, toDate);
                 }
                 if (isMarked) {
                     newTask.markAsDone();
@@ -56,6 +65,9 @@ public class Yoyo {
                     "system problem.\n" + tab + "I recommend that you reboot me and " +
                     "see if it fixes me!");
             System.out.println(tab + separator);
+        } catch (InvalidEventException e) {
+            // Do nothing as a correct memory.txt file will have only recorded
+            // valid events, assuming that no user edited this file.
         }
     }
 
@@ -160,7 +172,8 @@ public class Yoyo {
                         if (by.isEmpty()) {
                             throw new InvalidDeadlineException();
                         }
-                        String taskString = this.addTask(description, by);
+                        LocalDateTime byDate = LocalDateTime.parse(by, this.parseFormatter);
+                        String taskString = this.addTask(description, byDate);
                         System.out.println(tab + separator);
                         System.out.println(tab + "Alright-y, I've added your task:\n" +
                                 tab + "   " + taskString + "\n" + tab + "Now you have "
@@ -190,7 +203,9 @@ public class Yoyo {
                         if (to.isEmpty()) {
                             throw new InvalidEventException();
                         }
-                        String taskString = this.addTask(description, from, to);
+                        LocalDateTime fromDate = LocalDateTime.parse(from, this.parseFormatter);
+                        LocalDateTime toDate = LocalDateTime.parse(to, this.parseFormatter);
+                        String taskString = this.addTask(description, fromDate, toDate);
                         System.out.println(tab + separator);
                         System.out.println(tab + "Alright-y, I've added your task:\n" +
                                 tab + "   " + taskString + "\n" + tab + "Now you have "
@@ -225,8 +240,10 @@ public class Yoyo {
                 System.out.println(tab + separator);
             } catch (InvalidEventException e) {
                 System.out.println(tab + separator);
-                System.out.println(tab + "Umm... The description, from date " +
-                        "and to date\n" + tab + "of an event cannot be empty.");
+                System.out.println(tab + "Umm... Your prompt doesn't sound right. " +
+                        "Check that the description,\n" + tab + "from-date and to-date " +
+                        "of your event is not empty.\n" + tab + "Oh, and double check that your " +
+                        "to-date happens after your from-date!");
                 System.out.println(tab + separator);
             } catch (NoSuchElementException e) {
                 // User pressed enter without typing command. Wait for next
@@ -237,6 +254,12 @@ public class Yoyo {
                         "there.\n" + tab + "I had a problem keeping track of all " +
                         "your tasks.\n" + tab + "You may find that some tasks are not " +
                         "properly saved\n" + tab + "when you reboot me...");
+                System.out.println(tab + separator);
+            } catch (DateTimeParseException e) {
+                System.out.println(tab + separator);
+                System.out.println(tab + "Umm... I didn't want to say this but you've " +
+                        "entered\n" + tab + "the date and time in the wrong format or a date\n" +
+                        tab + "that doesn't exist!\n" + tab + "Just remember: yyyy-MM-dd HH:mm.");
                 System.out.println(tab + separator);
             }
         }
@@ -261,14 +284,14 @@ public class Yoyo {
         return newToDo.toString();
     }
 
-    private String addTask(String description, String by) throws EditMemoryException {
+    private String addTask(String description, LocalDateTime by) throws EditMemoryException {
         Deadline newDeadline = new Deadline(description, by);
         this.taskLst.add(newDeadline);
         this.updateMemory();
         return newDeadline.toString();
     }
 
-    private String addTask(String description, String from, String to) throws EditMemoryException {
+    private String addTask(String description, LocalDateTime from, LocalDateTime to) throws EditMemoryException, InvalidEventException {
         Event newEvent = new Event(description, from, to);
         this.taskLst.add(newEvent);
         this.updateMemory();

@@ -9,12 +9,12 @@
     ========================================================
     ========================================================
     Alright-y, I've added your task:
-       [D][ ] return book (by: June 6th)
+       [D][ ] return book (by: Jun 06 2027, 5:00 pm)
     Now you have 2 tasks in the list.
     ========================================================
     ========================================================
     Alright-y, I've added your task:
-       [E][ ] project meeting (from: Aug 6th 2pm to: 4pm)
+       [E][ ] project meeting (from: Aug 06 2030, 2:00 pm to: Aug 06 2030, 4:00 pm)
     Now you have 3 tasks in the list.
     ========================================================
     ========================================================
@@ -35,18 +35,18 @@
     ========================================================
     Oh man, you're clearing them tasks like a pro!
     Marked it for you:
-       [E][X] project meeting (from: Aug 6th 2pm to: 4pm)
+       [E][X] project meeting (from: Aug 06 2030, 2:00 pm to: Aug 06 2030, 4:00 pm)
     ========================================================
     ========================================================
     1. [T][X] read book
-    2. [D][ ] return book (by: June 6th)
-    3. [E][X] project meeting (from: Aug 6th 2pm to: 4pm)
+    2. [D][ ] return book (by: Jun 06 2027, 5:00 pm)
+    3. [E][X] project meeting (from: Aug 06 2030, 2:00 pm to: Aug 06 2030, 4:00 pm)
     4. [T][X] join sports club
     ========================================================
     ========================================================
     Bruh... Alright fine, I won't judge!
     Unmarked it for you:
-       [E][ ] project meeting (from: Aug 6th 2pm to: 4pm)
+       [E][ ] project meeting (from: Aug 06 2030, 2:00 pm to: Aug 06 2030, 4:00 pm)
     ========================================================
     ========================================================
     Alright-y, I've added your task:
@@ -55,25 +55,20 @@
     ========================================================
     ========================================================
     1. [T][X] read book
-    2. [D][ ] return book (by: June 6th)
-    3. [E][ ] project meeting (from: Aug 6th 2pm to: 4pm)
+    2. [D][ ] return book (by: Jun 06 2027, 5:00 pm)
+    3. [E][ ] project meeting (from: Aug 06 2030, 2:00 pm to: Aug 06 2030, 4:00 pm)
     4. [T][X] join sports club
     5. [T][ ] borrow book
     ========================================================
     ========================================================
     Alright-y, I've added your task:
-       [D][ ] return book (by: Sunday)
+       [D][ ] return book (by: Aug 31 2025, 8:00 am)
     Now you have 6 tasks in the list.
     ========================================================
     ========================================================
     Alright-y, I've added your task:
-       [E][ ] project meeting (from: Mon 2pm to: 4pm)
+       [E][ ] project meeting (from: Aug 25 2025, 2:00 pm to: Aug 25 2025, 4:00 pm)
     Now you have 7 tasks in the list.
-    ========================================================
-    ========================================================
-    Alright-y, I've added your task:
-       [D][ ] do homework (by: no idea :-p)
-    Now you have 8 tasks in the list.
     ========================================================
     ========================================================
     Umm... What did you just say? I genuinely don't
@@ -96,39 +91,65 @@
     cannot be empty.
     ========================================================
     ========================================================
-    Umm... The description, from date and to date
-    of an event cannot be empty.
+    Umm... Your prompt doesn't sound right. Check that the description,
+    from-date and to-date of your event is not empty.
+    Oh, and double check that your to-date happens after your from-date!
     ========================================================
     ========================================================
-    Umm... The description, from date and to date
-    of an event cannot be empty.
+    Umm... Your prompt doesn't sound right. Check that the description,
+    from-date and to-date of your event is not empty.
+    Oh, and double check that your to-date happens after your from-date!
+    ========================================================
+    ========================================================
+    Umm... Your prompt doesn't sound right. Check that the description,
+    from-date and to-date of your event is not empty.
+    Oh, and double check that your to-date happens after your from-date!
+    ========================================================
+    ========================================================
+    Umm... Your prompt doesn't sound right. Check that the description,
+    from-date and to-date of your event is not empty.
+    Oh, and double check that your to-date happens after your from-date!
+    ========================================================
+    ========================================================
+    Umm... Your prompt doesn't sound right. Check that the description,
+    from-date and to-date of your event is not empty.
+    Oh, and double check that your to-date happens after your from-date!
     ========================================================
     ========================================================
     Umm... You've entered an invalid task number.
     ========================================================
     ========================================================
     1. [T][X] read book
-    2. [D][ ] return book (by: June 6th)
-    3. [E][ ] project meeting (from: Aug 6th 2pm to: 4pm)
+    2. [D][ ] return book (by: Jun 06 2027, 5:00 pm)
+    3. [E][ ] project meeting (from: Aug 06 2030, 2:00 pm to: Aug 06 2030, 4:00 pm)
     4. [T][X] join sports club
     5. [T][ ] borrow book
-    6. [D][ ] return book (by: Sunday)
-    7. [E][ ] project meeting (from: Mon 2pm to: 4pm)
-    8. [D][ ] do homework (by: no idea :-p)
+    6. [D][ ] return book (by: Aug 31 2025, 8:00 am)
+    7. [E][ ] project meeting (from: Aug 25 2025, 2:00 pm to: Aug 25 2025, 4:00 pm)
     ========================================================
     ========================================================
     Gotcha, it's gone! I've deleted this task:
-    [E][ ] project meeting (from: Aug 6th 2pm to: 4pm)
-    Now you have 7 tasks in the list.
+    [E][ ] project meeting (from: Aug 06 2030, 2:00 pm to: Aug 06 2030, 4:00 pm)
+    Now you have 6 tasks in the list.
     ========================================================
     ========================================================
     1. [T][X] read book
-    2. [D][ ] return book (by: June 6th)
+    2. [D][ ] return book (by: Jun 06 2027, 5:00 pm)
     3. [T][X] join sports club
     4. [T][ ] borrow book
-    5. [D][ ] return book (by: Sunday)
-    6. [E][ ] project meeting (from: Mon 2pm to: 4pm)
-    7. [D][ ] do homework (by: no idea :-p)
+    5. [D][ ] return book (by: Aug 31 2025, 8:00 am)
+    6. [E][ ] project meeting (from: Aug 25 2025, 2:00 pm to: Aug 25 2025, 4:00 pm)
+    ========================================================
+    ========================================================
+    Umm... I didn't want to say this but you've entered
+    the date and time in the wrong format or a date
+    that doesn't exist!
+    Just remember: yyyy-MM-dd HH:mm.
+    ========================================================
+    ========================================================
+    Umm... Your prompt doesn't sound right. Check that the description,
+    from-date and to-date of your event is not empty.
+    Oh, and double check that your to-date happens after your from-date!
     ========================================================
     ========================================================
     Aww, bye! See ya later.
