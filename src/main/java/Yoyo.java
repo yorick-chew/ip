@@ -1,6 +1,3 @@
-import java.time.LocalDateTime;
-import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -8,11 +5,12 @@ import java.io.IOException;
 import java.io.File;
 import java.io.FileWriter;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.time.format.DateTimeFormatter;
 
 public class Yoyo {
-    private ArrayList<Task> taskLst = new ArrayList<>();
+    private TaskList taskLst = new TaskList();
     private final String filePath = "data/memory.txt";
     private DateTimeFormatter parseFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
@@ -56,7 +54,7 @@ public class Yoyo {
                 if (isMarked) {
                     newTask.markAsDone();
                 }
-                this.taskLst.add(newTask);
+                this.taskLst.addTask(newTask);
             }
         } catch (IOException | MissingMemoryException e) {
             System.out.println(tab + separator);
@@ -108,11 +106,11 @@ public class Yoyo {
                 } else if (command.equals("mark")) {
                     try {
                         int taskNum = commandScanner.nextInt();
-                        String taskString = this.markAsDone(taskNum);
+                        Task task = this.markAsDone(taskNum);
                         System.out.println(tab + separator);
                         System.out.println(tab + "Oh man, you're clearing them tasks" +
                                 " like a pro!\n" + tab + "Marked it for you:\n" +
-                                tab + "   " + taskString);
+                                tab + "   " + task);
                         System.out.println(tab + separator);
                     } catch (NoSuchElementException e) {
                         throw new InvalidTaskException();
@@ -120,11 +118,11 @@ public class Yoyo {
                 } else if (command.equals("unmark")) {
                     try {
                         int taskNum = commandScanner.nextInt();
-                        String taskString = this.unmarkAsDone(taskNum);
+                        Task task = this.unmarkAsDone(taskNum);
                         System.out.println(tab + separator);
                         System.out.println(tab + "Bruh... Alright fine, I won't judge!\n" +
                                 tab + "Unmarked it for you:\n" + tab + "   " +
-                                taskString);
+                                task);
                         System.out.println(tab + separator);
                     } catch (NoSuchElementException e) {
                         throw new InvalidTaskException();
@@ -132,10 +130,10 @@ public class Yoyo {
                 } else if (command.equals("delete")) {
                     try {
                         int taskNum = commandScanner.nextInt();
-                        String taskString = this.removeTask(taskNum);
+                        Task task = this.removeTask(taskNum);
                         System.out.println(tab + separator);
                         System.out.println(tab + "Gotcha, it's gone! I've deleted this " +
-                                "task:\n" + tab + taskString + "\n" + tab + "Now you have "
+                                "task:\n" + tab + task + "\n" + tab + "Now you have "
                                 + this.numOfTasks() + " tasks in the list.");
                         System.out.println(tab + separator);
                     } catch (NoSuchElementException e) {
@@ -148,11 +146,11 @@ public class Yoyo {
                         if (description.isEmpty()) {
                             throw new InvalidToDoException();
                         }
-                        String taskString = this.addTask(description);
+                        Task task = this.addTask(description);
 
                         System.out.println(tab + separator);
                         System.out.println(tab + "Alright-y, I've added your task:\n" +
-                                tab + "   " + taskString + "\n" + tab + "Now you have "
+                                tab + "   " + task + "\n" + tab + "Now you have "
                                 + this.numOfTasks() + " tasks in the list.");
                         System.out.println(tab + separator);
                     } catch (NoSuchElementException e) {
@@ -173,10 +171,10 @@ public class Yoyo {
                             throw new InvalidDeadlineException();
                         }
                         LocalDateTime byDate = LocalDateTime.parse(by, this.parseFormatter);
-                        String taskString = this.addTask(description, byDate);
+                        Task task = this.addTask(description, byDate);
                         System.out.println(tab + separator);
                         System.out.println(tab + "Alright-y, I've added your task:\n" +
-                                tab + "   " + taskString + "\n" + tab + "Now you have "
+                                tab + "   " + task + "\n" + tab + "Now you have "
                                 + this.numOfTasks() + " tasks in the list.");
                         System.out.println(tab + separator);
                     } catch (NoSuchElementException e) {
@@ -205,10 +203,10 @@ public class Yoyo {
                         }
                         LocalDateTime fromDate = LocalDateTime.parse(from, this.parseFormatter);
                         LocalDateTime toDate = LocalDateTime.parse(to, this.parseFormatter);
-                        String taskString = this.addTask(description, fromDate, toDate);
+                        Task task = this.addTask(description, fromDate, toDate);
                         System.out.println(tab + separator);
                         System.out.println(tab + "Alright-y, I've added your task:\n" +
-                                tab + "   " + taskString + "\n" + tab + "Now you have "
+                                tab + "   " + task + "\n" + tab + "Now you have "
                                 + this.numOfTasks() + " tasks in the list.");
                         System.out.println(tab + separator);
                     } catch (NoSuchElementException e) {
@@ -268,8 +266,8 @@ public class Yoyo {
     private void updateMemory() throws EditMemoryException {
         try {
             FileWriter fw = new FileWriter(this.filePath);
-            for (Task task : this.taskLst) {
-                fw.write(task.getSaveString() + System.lineSeparator());
+            for (int idx = 0; idx < this.numOfTasks() - 1; idx++) {
+                fw.write(this.taskLst.get(idx).getSaveString() + System.lineSeparator());
             }
             fw.close();
         } catch (IOException e) {
@@ -277,57 +275,52 @@ public class Yoyo {
         }
     }
 
-    private String addTask(String description) throws EditMemoryException {
+    private Task addTask(String description) throws EditMemoryException {
         ToDo newToDo = new ToDo(description);
-        this.taskLst.add(newToDo);
+        this.taskLst.addTask(newToDo);
         this.updateMemory();
-        return newToDo.toString();
+        return newToDo;
     }
 
-    private String addTask(String description, LocalDateTime by) throws EditMemoryException {
+    private Task addTask(String description, LocalDateTime by) throws EditMemoryException {
         Deadline newDeadline = new Deadline(description, by);
-        this.taskLst.add(newDeadline);
+        this.taskLst.addTask(newDeadline);
         this.updateMemory();
-        return newDeadline.toString();
+        return newDeadline;
     }
 
-    private String addTask(String description, LocalDateTime from, LocalDateTime to) throws EditMemoryException, InvalidEventException {
+    private Task addTask(String description, LocalDateTime from, LocalDateTime to) throws EditMemoryException, InvalidEventException {
         Event newEvent = new Event(description, from, to);
-        this.taskLst.add(newEvent);
+        this.taskLst.addTask(newEvent);
         this.updateMemory();
-        return newEvent.toString();
+        return newEvent;
     }
 
-    private String removeTask(int taskNum) throws InvalidTaskException, EditMemoryException {
+    private Task removeTask(int taskNum) throws InvalidTaskException, EditMemoryException {
         if (taskNum <= 0 || taskNum > this.numOfTasks()) {
             throw new InvalidTaskException();
         }
-        int taskIdx = taskNum - 1;
-        Task task = this.taskLst.remove(taskIdx);
+        Task task = this.taskLst.removeTask(taskNum);
         this.updateMemory();
-        return task.toString();
+        return task;
     }
 
-    private String markAsDone(int taskNum) throws InvalidTaskException, EditMemoryException {
+    private Task markAsDone(int taskNum) throws InvalidTaskException, EditMemoryException {
         if (taskNum <= 0 || taskNum > this.numOfTasks()) {
             throw new InvalidTaskException();
         }
-        int taskIdx = taskNum - 1;
-        Task task = this.taskLst.get(taskIdx);
-        task.markAsDone();
+        Task task = this.taskLst.markAsDone(taskNum);
         this.updateMemory();
-        return task.toString();
+        return task;
     }
 
-    private String unmarkAsDone(int taskNum) throws InvalidTaskException, EditMemoryException {
+    private Task unmarkAsDone(int taskNum) throws InvalidTaskException, EditMemoryException {
         if (taskNum <= 0 || taskNum > this.numOfTasks()) {
             throw new InvalidTaskException();
         }
-        int taskIdx = taskNum - 1;
-        Task task = this.taskLst.get(taskIdx);
-        task.unmarkAsDone();
+        Task task = this.taskLst.unmarkAsDone(taskNum);
         this.updateMemory();
-        return task.toString();
+        return task;
     }
 
     private int numOfTasks() {
