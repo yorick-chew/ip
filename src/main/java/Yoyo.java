@@ -10,8 +10,8 @@ import java.time.format.DateTimeParseException;
 import java.time.format.DateTimeFormatter;
 
 public class Yoyo {
-    private TaskList taskLst = new TaskList();
-    private final String filePath = "data/memory.txt";
+    private Storage storage;
+    private TaskList taskLst;
     private DateTimeFormatter parseFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     public Yoyo() {
@@ -19,43 +19,9 @@ public class Yoyo {
         String separator = "=========================" +
                 "===============================";
         String tab = "    ";
+        this.storage = new Storage();
         try {
-            File dataDir = new File("data");
-            dataDir.mkdir();
-            if (!(dataDir.exists())) {
-                throw new MissingMemoryException();
-            }
-            File memory = new File(this.filePath);
-            memory.createNewFile();
-
-            // Fill up taskLst with saved memory
-            Scanner memoryScanner = new Scanner(memory);
-            memoryScanner.useDelimiter("\\|");
-            while (memoryScanner.hasNextLine()) {
-                String line = memoryScanner.nextLine();
-                String[] taskInfo = line.split("\\|");
-                String taskType = taskInfo[0];
-                boolean isMarked = Boolean.parseBoolean(taskInfo[1]);
-                String description = taskInfo[2];
-                Task newTask;
-                if (taskType.equals("T")) {
-                    newTask = new ToDo(description);
-                } else if (taskType.equals("D")) {
-                    String by = taskInfo[3];
-                    LocalDateTime byDate = LocalDateTime.parse(by, this.parseFormatter);
-                    newTask = new Deadline(description, byDate);
-                } else {
-                    String from = taskInfo[3];
-                    String to = taskInfo[4];
-                    LocalDateTime fromDate = LocalDateTime.parse(from, this.parseFormatter);
-                    LocalDateTime toDate = LocalDateTime.parse(to, this.parseFormatter);
-                    newTask = new Event(description, fromDate, toDate);
-                }
-                if (isMarked) {
-                    newTask.markAsDone();
-                }
-                this.taskLst.addTask(newTask);
-            }
+            this.taskLst = new TaskList(storage.load());
         } catch (IOException | MissingMemoryException e) {
             System.out.println(tab + separator);
             System.out.println(tab + "Uh-oh... I'm having amnesia! I can't save " +
@@ -63,9 +29,6 @@ public class Yoyo {
                     "system problem.\n" + tab + "I recommend that you reboot me and " +
                     "see if it fixes me!");
             System.out.println(tab + separator);
-        } catch (InvalidEventException e) {
-            // Do nothing as a correct memory.txt file will have only recorded
-            // valid events, assuming that no user edited this file.
         }
     }
 
@@ -263,36 +226,24 @@ public class Yoyo {
         }
     }
 
-    private void updateMemory() throws EditMemoryException {
-        try {
-            FileWriter fw = new FileWriter(this.filePath);
-            for (int idx = 0; idx < this.numOfTasks() - 1; idx++) {
-                fw.write(this.taskLst.get(idx).getSaveString() + System.lineSeparator());
-            }
-            fw.close();
-        } catch (IOException e) {
-            throw new EditMemoryException();
-        }
-    }
-
     private Task addTask(String description) throws EditMemoryException {
         ToDo newToDo = new ToDo(description);
         this.taskLst.addTask(newToDo);
-        this.updateMemory();
+        this.storage.updateMemory(this.taskLst);
         return newToDo;
     }
 
     private Task addTask(String description, LocalDateTime by) throws EditMemoryException {
         Deadline newDeadline = new Deadline(description, by);
         this.taskLst.addTask(newDeadline);
-        this.updateMemory();
+        this.storage.updateMemory(this.taskLst);
         return newDeadline;
     }
 
     private Task addTask(String description, LocalDateTime from, LocalDateTime to) throws EditMemoryException, InvalidEventException {
         Event newEvent = new Event(description, from, to);
         this.taskLst.addTask(newEvent);
-        this.updateMemory();
+        this.storage.updateMemory(this.taskLst);
         return newEvent;
     }
 
@@ -301,7 +252,7 @@ public class Yoyo {
             throw new InvalidTaskException();
         }
         Task task = this.taskLst.removeTask(taskNum);
-        this.updateMemory();
+        this.storage.updateMemory(this.taskLst);
         return task;
     }
 
@@ -310,7 +261,7 @@ public class Yoyo {
             throw new InvalidTaskException();
         }
         Task task = this.taskLst.markAsDone(taskNum);
-        this.updateMemory();
+        this.storage.updateMemory(this.taskLst);
         return task;
     }
 
@@ -319,7 +270,7 @@ public class Yoyo {
             throw new InvalidTaskException();
         }
         Task task = this.taskLst.unmarkAsDone(taskNum);
-        this.updateMemory();
+        this.storage.updateMemory(this.taskLst);
         return task;
     }
 
