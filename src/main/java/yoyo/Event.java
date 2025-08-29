@@ -16,6 +16,14 @@ public class Event extends Task {
         this.to = to;
     }
 
+    protected LocalDateTime getFrom() {
+        return this.from;
+    }
+
+    protected LocalDateTime getTo() {
+        return this.to;
+    }
+
     @Override
     public String getSaveString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -23,6 +31,17 @@ public class Event extends Task {
         String formattedToDate = this.to.format(formatter);
         return "E|" + super.getSaveString() + "|" + formattedFromDate + "|" +
                 formattedToDate;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Event) {
+            Event event = (Event) obj;
+            return event.getDescription().equals(this.description) &&
+                    (event.getFrom().equals(this.from)) &&
+                    (event.getTo().equals(this.to));
+        }
+        return false;
     }
 
     @Override

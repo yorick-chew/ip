@@ -13,6 +13,14 @@ public class Task {
         return (isDone ? "X" : " "); // mark done task with X
     }
 
+    public String getDescription() {
+        return this.description;
+    }
+
+    public boolean isDone() {
+        return this.isDone;
+    }
+
     public void markAsDone() {
         this.isDone = true;
     }
@@ -22,7 +30,7 @@ public class Task {
     }
 
     public String getSaveString() {
-        return Boolean.toString(this.isDone) + "|" + description;
+        return this.isDone + "|" + description;
     }
 
     public String toString() {

@@ -11,11 +11,25 @@ public class Deadline extends Task {
         this.by = by;
     }
 
+    protected LocalDateTime getBy() {
+        return this.by;
+    }
+
     @Override
     public String getSaveString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         String formattedDate = this.by.format(formatter);
         return "D|" + super.getSaveString() + "|" + formattedDate;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Deadline) {
+            Deadline deadline = (Deadline) obj;
+            return deadline.getDescription().equals(this.description) &&
+                    (deadline.getBy().equals(this.by));
+        }
+        return false;
     }
 
     @Override

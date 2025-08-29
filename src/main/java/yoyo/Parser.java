@@ -6,22 +6,14 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class Parser {
-    private Scanner scanner;
-    private DateTimeFormatter parseFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private final DateTimeFormatter parseFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-    public Parser() {
-        this.scanner = new Scanner(System.in);
-    }
-
-    public Command interpretCommand() throws InvalidToDoException, NoSuchElementException,
+    public Command interpretCommand(String userPrompt) throws InvalidToDoException,
             InvalidDeadlineException, InvalidEventException, UnknownCommandException,
             InvalidTaskException {
-        String userPrompt;
-        Scanner commandScanner;
+        Scanner commandScanner = new Scanner(userPrompt);
         String command;
         try {
-            userPrompt = this.scanner.nextLine();
-            commandScanner = new Scanner(userPrompt);
             command = commandScanner.next();
         } catch (NoSuchElementException e) {
             throw new UnknownCommandException();

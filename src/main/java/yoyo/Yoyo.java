@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
+import java.util.Scanner;
 
 public class Yoyo {
     private final Storage storage;
@@ -31,9 +32,11 @@ public class Yoyo {
         // Detects the user's command and performs the
         // appropriate action with formatting
         Parser parser = new Parser();
+        Scanner scanner = new Scanner(System.in);
         while (true) {
             try {
-                Command userCommand = parser.interpretCommand();
+                String inputLine = scanner.nextLine();
+                Command userCommand = parser.interpretCommand(inputLine);
                 String commandType = userCommand.getCommand();
 
                 if (commandType.equals("bye")) {
@@ -130,7 +133,8 @@ public class Yoyo {
         return newDeadline;
     }
 
-    private Task addTask(String description, LocalDateTime from, LocalDateTime to) throws EditMemoryException, InvalidEventException {
+    private Task addTask(String description, LocalDateTime from, LocalDateTime to)
+            throws EditMemoryException, InvalidEventException {
         Event newEvent = new Event(description, from, to);
         this.taskLst.addTask(newEvent);
         this.storage.updateMemory(this.taskLst);
@@ -160,7 +164,7 @@ public class Yoyo {
             throw new InvalidTaskException();
         }
         Task task = this.taskLst.unmarkAsDone(taskNum);
-        this.storage.updateMemory(this.taskLst);
+        this.storage.updateMemory(this  .taskLst);
         return task;
     }
 
