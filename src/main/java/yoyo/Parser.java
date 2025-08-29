@@ -5,9 +5,30 @@ import java.time.format.DateTimeFormatter;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+/**
+ * Parses through the user's input in the command line and
+ * interprets the corresponding command requested by the user.
+ */
 public class Parser {
     private final DateTimeFormatter parseFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
+    /**
+     * Interprets the given user command, userPrompt, and
+     * produces a Command object that can be used by the
+     * chatbot to quickly carry out actions.
+     *
+     * @param userPrompt The user's command.
+     * @return A Command object with details about the command.
+     * @throws InvalidToDoException If the userPrompt provides an incomplete
+     *                              todo command.
+     * @throws InvalidDeadlineException If the userPrompt provides an incomplete
+     *                                  deadline command.
+     * @throws InvalidEventException If the userPrompt provides an incomplete
+     *                               event command.
+     * @throws UnknownCommandException If the userPrompt provides an invalid command.
+     * @throws InvalidTaskException If the userPrompt provides an incomplete
+     *                              mark, unmark or delete command.
+     */
     public Command interpretCommand(String userPrompt) throws InvalidToDoException,
             InvalidDeadlineException, InvalidEventException, UnknownCommandException,
             InvalidTaskException {

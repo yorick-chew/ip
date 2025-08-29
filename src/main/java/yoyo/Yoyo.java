@@ -6,11 +6,20 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
+/**
+ * Manages a user's tasks (to-dos, deadlines and events)
+ * through commands in the terminal.
+ */
 public class Yoyo {
     private final Storage storage;
     private TaskList taskLst;
     private Ui ui;
 
+    /**
+     * Yoyo class
+     *
+     * Instantiates a chatbot that manages a user's tasks.
+     */
     public Yoyo() {
         // Set up and check for chatbot memory
         this.storage = new Storage();
@@ -25,6 +34,10 @@ public class Yoyo {
         }
     }
 
+    /**
+     * Runs the chatbot so that users can begin interacting with it.
+     * Users can input commands to create, manage and delete tasks.
+     */
     public void run() {
         // Begin running Yoyo's interactions
         this.ui.displayBotMessage(new String[]{"Yo! The name's Yoyo.", "What can I do for you?"});
