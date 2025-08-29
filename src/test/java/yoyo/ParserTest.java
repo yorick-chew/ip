@@ -71,8 +71,8 @@ public class ParserTest {
 
         Parser testParser = new Parser();
         Command command = testParser.interpretCommand(
-                "event iP Week 3 /from 2025-08-25 00:00 " +
-                        "/to 2025-08-29 16:00");
+                "event iP Week 3 /from 2025-08-25 00:00 "
+                        + "/to 2025-08-29 16:00");
         assertEquals("event", command.getCommand());
         assertEquals("iP Week 3", command.getDescription());
         assertEquals(LocalDateTime.of(2025, 8, 25,
@@ -99,48 +99,48 @@ public class ParserTest {
             Command command = testParser.interpretCommand("mark");
             fail();
         } catch (Exception e) {
-            assertEquals("The user entered an invalid number as parameter for" +
-                    "the mark, unmark or delete command.", e.getMessage());
+            assertEquals("The user entered an invalid number as parameter for"
+                    + "the mark, unmark or delete command.", e.getMessage());
         }
         try {
             Parser testParser = new Parser();
             Command command = testParser.interpretCommand("mark ");
             fail();
         } catch (Exception e) {
-            assertEquals("The user entered an invalid number as parameter for" +
-                    "the mark, unmark or delete command.", e.getMessage());
+            assertEquals("The user entered an invalid number as parameter for"
+                    + "the mark, unmark or delete command.", e.getMessage());
         }
         try {
             Parser testParser = new Parser();
             Command command = testParser.interpretCommand("unmark");
             fail();
         } catch (Exception e) {
-            assertEquals("The user entered an invalid number as parameter for" +
-                    "the mark, unmark or delete command.", e.getMessage());
+            assertEquals("The user entered an invalid number as parameter for"
+                    + "the mark, unmark or delete command.", e.getMessage());
         }
         try {
             Parser testParser = new Parser();
             Command command = testParser.interpretCommand("unmark ");
             fail();
         } catch (Exception e) {
-            assertEquals("The user entered an invalid number as parameter for" +
-                    "the mark, unmark or delete command.", e.getMessage());
+            assertEquals("The user entered an invalid number as parameter for"
+                    + "the mark, unmark or delete command.", e.getMessage());
         }
         try {
             Parser testParser = new Parser();
             Command command = testParser.interpretCommand("delete");
             fail();
         } catch (Exception e) {
-            assertEquals("The user entered an invalid number as parameter for" +
-                    "the mark, unmark or delete command.", e.getMessage());
+            assertEquals("The user entered an invalid number as parameter for"
+                    + "the mark, unmark or delete command.", e.getMessage());
         }
         try {
             Parser testParser = new Parser();
             Command command = testParser.interpretCommand("delete ");
             fail();
         } catch (Exception e) {
-            assertEquals("The user entered an invalid number as parameter for" +
-                    "the mark, unmark or delete command.", e.getMessage());
+            assertEquals("The user entered an invalid number as parameter for"
+                    + "the mark, unmark or delete command.", e.getMessage());
         }
     }
 
@@ -151,16 +151,16 @@ public class ParserTest {
             Command command = testParser.interpretCommand("todo");
             fail();
         } catch (Exception e) {
-            assertEquals("The user entered an incomplete command " +
-                    "to create a todo.", e.getMessage());
+            assertEquals("The user entered an incomplete command "
+                    + "to create a todo.", e.getMessage());
         }
         try {
             Parser testParser = new Parser();
             Command command = testParser.interpretCommand("todo ");
             fail();
         } catch (Exception e) {
-            assertEquals("The user entered an incomplete command " +
-                    "to create a todo.", e.getMessage());
+            assertEquals("The user entered an incomplete command "
+                    + "to create a todo.", e.getMessage());
         }
     }
 
@@ -171,32 +171,32 @@ public class ParserTest {
             Command command = testParser.interpretCommand("deadline");
             fail();
         } catch (Exception e) {
-            assertEquals("The user entered an incomplete command " +
-                    "to create a deadline.", e.getMessage());
+            assertEquals("The user entered an incomplete command "
+                    + "to create a deadline.", e.getMessage());
         }
         try {
             Parser testParser = new Parser();
             Command command = testParser.interpretCommand("deadline ");
             fail();
         } catch (Exception e) {
-            assertEquals("The user entered an incomplete command " +
-                    "to create a deadline.", e.getMessage());
+            assertEquals("The user entered an incomplete command "
+                    + "to create a deadline.", e.getMessage());
         }
         try {
             Parser testParser = new Parser();
             Command command = testParser.interpretCommand("deadline  ");
             fail();
         } catch (Exception e) {
-            assertEquals("The user entered an incomplete command " +
-                    "to create a deadline.", e.getMessage());
+            assertEquals("The user entered an incomplete command "
+                    + "to create a deadline.", e.getMessage());
         }
         try {
             Parser testParser = new Parser();
             Command command = testParser.interpretCommand("deadline /by");
             fail();
         } catch (Exception e) {
-            assertEquals("The user entered an incomplete command " +
-                    "to create a deadline.", e.getMessage());
+            assertEquals("The user entered an incomplete command "
+                    + "to create a deadline.", e.getMessage());
         }
         try {
             Parser testParser = new Parser();
@@ -204,24 +204,24 @@ public class ParserTest {
                     "deadline /by 2025-08-29 18:00");
             fail();
         } catch (Exception e) {
-            assertEquals("The user entered an incomplete command " +
-                    "to create a deadline.", e.getMessage());
+            assertEquals("The user entered an incomplete command "
+                    + "to create a deadline.", e.getMessage());
         }
         try {
             Parser testParser = new Parser();
             Command command = testParser.interpretCommand("deadline x /by");
             fail();
         } catch (Exception e) {
-            assertEquals("The user entered an incomplete command " +
-                    "to create a deadline.", e.getMessage());
+            assertEquals("The user entered an incomplete command "
+                    + "to create a deadline.", e.getMessage());
         }
         try {
             Parser testParser = new Parser();
             Command command = testParser.interpretCommand("deadline /by /by 2025-08-29 18:00");
             fail();
         } catch (Exception e) {
-            assertEquals("The user entered an incomplete command " +
-                    "to create a deadline.", e.getMessage());
+            assertEquals("The user entered an incomplete command "
+                    + "to create a deadline.", e.getMessage());
         }
     }
     @Test
@@ -231,88 +231,88 @@ public class ParserTest {
             Command command = testParser.interpretCommand("event");
             fail();
         } catch (Exception e) {
-            assertEquals("The user entered an incomplete command " +
-                    "to create an event.", e.getMessage());
+            assertEquals("The user entered an incomplete command "
+                    + "to create an event.", e.getMessage());
         }
         try {
             Parser testParser = new Parser();
             Command command = testParser.interpretCommand("event ");
             fail();
         } catch (Exception e) {
-            assertEquals("The user entered an incomplete command " +
-                    "to create an event.", e.getMessage());
+            assertEquals("The user entered an incomplete command "
+                    + "to create an event.", e.getMessage());
         }
         try {
             Parser testParser = new Parser();
             Command command = testParser.interpretCommand("event  ");
             fail();
         } catch (Exception e) {
-            assertEquals("The user entered an incomplete command " +
-                    "to create an event.", e.getMessage());
+            assertEquals("The user entered an incomplete command "
+                    + "to create an event.", e.getMessage());
         }
         try {
             Parser testParser = new Parser();
             Command command = testParser.interpretCommand("event /by 2025-08-29 16:00");
             fail();
         } catch (Exception e) {
-            assertEquals("The user entered an incomplete command " +
-                    "to create an event.", e.getMessage());
+            assertEquals("The user entered an incomplete command "
+                    + "to create an event.", e.getMessage());
         }
         try {
             Parser testParser = new Parser();
             Command command = testParser.interpretCommand("event /from");
             fail();
         } catch (Exception e) {
-            assertEquals("The user entered an incomplete command " +
-                    "to create an event.", e.getMessage());
+            assertEquals("The user entered an incomplete command "
+                    + "to create an event.", e.getMessage());
         }
         try {
             Parser testParser = new Parser();
             Command command = testParser.interpretCommand("event / from");
             fail();
         } catch (Exception e) {
-            assertEquals("The user entered an incomplete command " +
-                    "to create an event.", e.getMessage());
+            assertEquals("The user entered an incomplete command "
+                    + "to create an event.", e.getMessage());
         }
         try {
             Parser testParser = new Parser();
             Command command = testParser.interpretCommand("event /from /from /to 2025-08-29 16:00");
             fail();
         } catch (Exception e) {
-            assertEquals("The user entered an incomplete command " +
-                    "to create an event.", e.getMessage());
+            assertEquals("The user entered an incomplete command "
+                    + "to create an event.", e.getMessage());
         }
         try {
             Parser testParser = new Parser();
             Command command = testParser.interpretCommand("event x /from ");
             fail();
         } catch (Exception e) {
-            assertEquals("The user entered an incomplete command " +
-                    "to create an event.", e.getMessage());
+            assertEquals("The user entered an incomplete command "
+                    + "to create an event.", e.getMessage());
         }
         try {
             Parser testParser = new Parser();
             Command command = testParser.interpretCommand("event x /from  ");
             fail();
         } catch (Exception e) {
-            assertEquals("The user entered an incomplete command " +
-                    "to create an event.", e.getMessage());
+            assertEquals("The user entered an incomplete command "
+                    + "to create an event.", e.getMessage());
         }
         try {
             Parser testParser = new Parser();
             Command command = testParser.interpretCommand("event x /from 2025-08-29 16:00 /to");
             fail();
         } catch (Exception e) {
-            assertEquals("The user entered an incomplete command " +
-                    "to create an event.", e.getMessage());
+            assertEquals("The user entered an incomplete command "
+                    + "to create an event.", e.getMessage());
         }
         try {
             Parser testParser = new Parser();
             Command command = testParser.interpretCommand("event x /from 2025-08-29 16:00 /to ");
             fail();
         } catch (Exception e) {
-            assertEquals("The user entered an incomplete command " +
-                    "to create an event.", e.getMessage());
+            assertEquals("The user entered an incomplete command "
+                    + "to create an event.", e.getMessage());
         }
     }
 
@@ -324,8 +324,8 @@ public class ParserTest {
                     "event /from 2025-08-29 16:00 /to 2025-08-29 15:00");
             fail();
         } catch (Exception e) {
-            assertEquals("The user entered an incomplete command " +
-                    "to create an event.", e.getMessage());
+            assertEquals("The user entered an incomplete command "
+                    + "to create an event.", e.getMessage());
         }
     }
 }

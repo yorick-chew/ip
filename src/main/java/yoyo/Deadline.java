@@ -12,13 +12,13 @@ public class Deadline extends Task {
     }
 
     protected LocalDateTime getBy() {
-        return this.by;
+        return by;
     }
 
     @Override
     public String getSaveString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        String formattedDate = this.by.format(formatter);
+        String formattedDate = by.format(formatter);
         return "D|" + super.getSaveString() + "|" + formattedDate;
     }
 
@@ -26,8 +26,9 @@ public class Deadline extends Task {
     public boolean equals(Object obj) {
         if (obj instanceof Deadline) {
             Deadline deadline = (Deadline) obj;
-            return deadline.getDescription().equals(this.description) &&
-                    (deadline.getBy().equals(this.by));
+            return deadline.getDescription().equals(this.getDescription())
+                    && (deadline.getBy().equals(by))
+                    && (deadline.isDone()) == this.isDone();
         }
         return false;
     }
@@ -35,7 +36,7 @@ public class Deadline extends Task {
     @Override
     public String toString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd yyyy, h:mm a");
-        String formattedDate = this.by.format(formatter);
+        String formattedDate = by.format(formatter);
         return "[D]" + super.toString() + " (by: " + formattedDate + ")";
     }
 }

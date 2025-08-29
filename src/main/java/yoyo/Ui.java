@@ -4,9 +4,9 @@ public class Ui {
     private static final String SEPARATOR = "============================================================";
     private static final String TAB = "    ";
 
-    public void displayBotMessage(String[] message) {
+    public void displayBotMessage(String[] messageLines) {
         System.out.println(TAB + SEPARATOR);
-        for (String messageLine : message) {
+        for (String messageLine : messageLines) {
             System.out.println(TAB + messageLine);
         }
         System.out.println(TAB + SEPARATOR);

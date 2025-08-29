@@ -12,7 +12,7 @@ import java.util.Scanner;
 
 public class Storage {
     private final String filePath = "data/memory.txt";
-    private DateTimeFormatter parseFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private final DateTimeFormatter parseFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     public ArrayList<Task> load() throws MissingMemoryException, IOException {
         // Creates the data dir and memory.txt file if they do not exist
@@ -22,26 +22,26 @@ public class Storage {
             throw new MissingMemoryException();
         }
 
-        File memory = new File(this.filePath);
+        File memory = new File(filePath);
         memory.createNewFile();
 
         // Fill up taskLst with saved memory
-        ArrayList<Task> taskLst = new ArrayList<>();
+        ArrayList<Task> savedTasks = new ArrayList<>();
         Scanner memoryScanner = new Scanner(memory);
 
         while (memoryScanner.hasNextLine()) {
             Task newTask = this.parseTask(memoryScanner.nextLine());
 
-            taskLst.add(newTask);
+            savedTasks.add(newTask);
         }
-        return taskLst;
+        return savedTasks;
     }
 
     public Task parseTask(String taskLine) {
-        String[] taskInfo = taskLine.split("\\|");
-        String taskType = taskInfo[0];
-        boolean isMarked = Boolean.parseBoolean(taskInfo[1]);
-        String description = taskInfo[2];
+        String[] taskDetails = taskLine.split("\\|");
+        String taskType = taskDetails[0];
+        boolean isMarked = Boolean.parseBoolean(taskDetails[1]);
+        String description = taskDetails[2];
         if (taskType.equals("T")) {
             ToDo newToDo = new ToDo(description);
             if (isMarked) {
@@ -49,34 +49,34 @@ public class Storage {
             }
             return newToDo;
         } else if (taskType.equals("D")) {
-            String by = taskInfo[3];
-            LocalDateTime byDate = LocalDateTime.parse(by, this.parseFormatter);
+            String by = taskDetails[3];
+            LocalDateTime byDate = LocalDateTime.parse(by, parseFormatter);
             Deadline newDeadline = new Deadline(description, byDate);
             if (isMarked) {
                 newDeadline.markAsDone();
             }
             return newDeadline;
         } else {
-            String from = taskInfo[3];
-            String to = taskInfo[4];
-            LocalDateTime fromDate = LocalDateTime.parse(from, this.parseFormatter);
-            LocalDateTime toDate = LocalDateTime.parse(to, this.parseFormatter);
-            Event newEvent = null;
+            String from = taskDetails[3];
+            String to = taskDetails[4];
+            LocalDateTime fromDate = LocalDateTime.parse(from, parseFormatter);
+            LocalDateTime toDate = LocalDateTime.parse(to, parseFormatter);
             try {
-                newEvent = new Event(description, fromDate, toDate);
+                return new Event(description, fromDate, toDate);
             } catch (InvalidEventException e) {
                 // Do nothing as a correct memory.txt file will have only recorded
                 // valid events, assuming that no user edited this file.
+                throw new RuntimeException("This exception should not be reached unless a"
+                        + "user edited the memory.txt file.", e);
             }
-            return newEvent;
         }
     }
 
-    public void updateMemory(TaskList taskLst) throws EditMemoryException {
+    public void updateMemory(TaskList tasksToSave) throws EditMemoryException {
         try {
-            FileWriter fw = new FileWriter(this.filePath);
-            for (int idx = 0; idx < taskLst.size(); idx++) {
-                fw.write(taskLst.get(idx).getSaveString() + System.lineSeparator());
+            FileWriter fw = new FileWriter(filePath);
+            for (int idx = 0; idx < tasksToSave.size(); idx++) {
+                fw.write(tasksToSave.get(idx).getSaveString() + System.lineSeparator());
             }
             fw.close();
         } catch (IOException e) {

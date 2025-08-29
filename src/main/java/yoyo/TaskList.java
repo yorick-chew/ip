@@ -3,44 +3,44 @@ package yoyo;
 import java.util.ArrayList;
 
 public class TaskList {
-    private ArrayList<Task> taskLst;
+    private ArrayList<Task> tasks;
 
     public TaskList() {
-        this.taskLst = new ArrayList<>();
+        tasks = new ArrayList<>();
     }
 
-    public TaskList(ArrayList<Task> taskLst) {
-        this.taskLst = taskLst;
+    public TaskList(ArrayList<Task> tasks) {
+        this.tasks = tasks;
     }
 
     public void addTask(Task newTask) {
-        this.taskLst.add(newTask);
+        tasks.add(newTask);
     }
 
     public Task get(int idx) {
-        return this.taskLst.get(idx);
+        return tasks.get(idx);
     }
 
     public Task removeTask(int taskNum) {
         int taskIdx = taskNum - 1;
-        return this.taskLst.remove(taskIdx);
+        return tasks.remove(taskIdx);
     }
 
     public Task markAsDone(int taskNum) {
         int taskIdx = taskNum - 1;
-        Task task = this.taskLst.get(taskIdx);
+        Task task = tasks.get(taskIdx);
         task.markAsDone();
         return task;
     }
 
     public Task unmarkAsDone(int taskNum) {
         int taskIdx = taskNum - 1;
-        Task task = this.taskLst.get(taskIdx);
+        Task task = tasks.get(taskIdx);
         task.unmarkAsDone();
         return task;
     }
 
     public int size() {
-        return this.taskLst.size();
+        return tasks.size();
     }
 }

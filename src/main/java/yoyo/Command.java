@@ -42,22 +42,22 @@ public class Command {
     }
 
     public String getCommand() {
-        return this.command;
+        return command;
     }
 
     public int getTaskNum() {
-        return this.taskNum;
+        return taskNum;
     }
 
     public String getDescription() {
-        return this.description;
+        return description;
     }
 
     public LocalDateTime getDateOne() {
-        return this.dateOne;
+        return dateOne;
     }
 
     public LocalDateTime getDateTwo() {
-        return this.dateTwo;
+        return dateTwo;
     }
 }
