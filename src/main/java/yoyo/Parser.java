@@ -10,7 +10,7 @@ public class Parser {
 
     public Command interpretCommand(String userPrompt) throws InvalidToDoException,
             InvalidDeadlineException, InvalidEventException, UnknownCommandException,
-            InvalidTaskException {
+            InvalidTaskException, InvalidFindException {
         Scanner commandScanner = new Scanner(userPrompt);
         String command;
         try {
@@ -30,6 +30,16 @@ public class Parser {
                 throw new InvalidTaskException();
             }
             return new Command(command, taskNum);
+        } else if (command.equals("find")) {
+            try {
+                String keyword = commandScanner.nextLine().substring(1);
+                if (keyword.isEmpty()) {
+                    throw new InvalidFindException();
+                }
+                return new Command("find", keyword);
+            } catch (NoSuchElementException e) {
+                throw new InvalidFindException();
+            }
         } else if (command.equals("todo")) {
             String description;
             try {

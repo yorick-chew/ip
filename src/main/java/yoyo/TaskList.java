@@ -40,6 +40,16 @@ public class TaskList {
         return task;
     }
 
+    public TaskList filterTasks(String keyword) {
+        ArrayList<Task> filteredTasks = new ArrayList<>();
+        for (Task task : taskLst) {
+            if (task.getDescription().contains(keyword)) {
+                filteredTasks.add(task);
+            }
+        }
+        return new TaskList(filteredTasks);
+    }
+
     public int size() {
         return this.taskLst.size();
     }
