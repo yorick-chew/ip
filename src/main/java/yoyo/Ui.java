@@ -11,14 +11,14 @@ public class Ui {
      * Formats and prints the chatbot's messages which
      * will then be displayed for the user to see.
      *
-     * @param message The response provided by the chatbot
+     * @param messageLines The response provided by the chatbot
      *                to be formatted, with each array element
      *                representing the text to be printed on
      *                each line.
      */
-    public void displayBotMessage(String[] message) {
+    public void displayBotMessage(String[] messageLines) {
         System.out.println(TAB + SEPARATOR);
-        for (String messageLine : message) {
+        for (String messageLine : messageLines) {
             System.out.println(TAB + messageLine);
         }
         System.out.println(TAB + SEPARATOR);

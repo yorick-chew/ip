@@ -6,7 +6,7 @@ public class Task {
 
     public Task(String description) {
         this.description = description;
-        this.isDone = false;
+        isDone = false;
     }
 
     public String getStatusIcon() {
@@ -14,23 +14,23 @@ public class Task {
     }
 
     public String getDescription() {
-        return this.description;
+        return description;
     }
 
     public boolean isDone() {
-        return this.isDone;
+        return isDone;
     }
 
     public void markAsDone() {
-        this.isDone = true;
+        isDone = true;
     }
 
     public void unmarkAsDone() {
-        this.isDone = false;
+        isDone = false;
     }
 
     public String getSaveString() {
-        return this.isDone + "|" + description;
+        return isDone + "|" + description;
     }
 
     public String toString() {

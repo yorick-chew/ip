@@ -43,31 +43,28 @@ public class Parser {
             return new Command("bye");
         } else if (command.equals("list")) {
             return new Command("list");
-        } else if (command.equals("mark") || command.equals("unmark") || command.equals("delete")) {
-            int taskNum;
+        } else if (command.equals("mark") || command.equals("unmark")
+                || command.equals("delete")) {
             try {
-                taskNum = commandScanner.nextInt();
+                int taskNum = commandScanner.nextInt();
+                return new Command(command, taskNum);
             } catch (NoSuchElementException e) {
                 throw new InvalidTaskException();
             }
-            return new Command(command, taskNum);
         } else if (command.equals("todo")) {
-            String description;
             try {
-                description = commandScanner.nextLine().substring(1);
+                String description = commandScanner.nextLine().substring(1);
                 if (description.isEmpty()) {
                     throw new InvalidToDoException();
                 }
+                return new Command("todo", description);
             } catch (NoSuchElementException e) {
                 throw new InvalidToDoException();
             }
-            return new Command("todo", description);
         } else if (command.equals("deadline")) {
-            String description;
-            LocalDateTime byDate;
             try {
                 commandScanner.useDelimiter(" /by ");
-                description = commandScanner.next().substring(1);
+                String description = commandScanner.next().substring(1);
                 if (description.isEmpty()) {
                     throw new InvalidDeadlineException();
                 }
@@ -77,18 +74,15 @@ public class Parser {
                 if (by.isEmpty()) {
                     throw new InvalidDeadlineException();
                 }
-                byDate = LocalDateTime.parse(by, this.parseFormatter);
+                LocalDateTime byDate = LocalDateTime.parse(by, parseFormatter);
+                return new Command(command, description, byDate);
             } catch (NoSuchElementException e) {
                 throw new InvalidDeadlineException();
             }
-            return new Command(command, description, byDate);
         } else if (command.equals("event")) {
-            String description;
-            LocalDateTime fromDate;
-            LocalDateTime toDate;
             try {
                 commandScanner.useDelimiter(" /from ");
-                description = commandScanner.next().substring(1);
+                String description = commandScanner.next().substring(1);
                 if (description.isEmpty()) {
                     throw new InvalidEventException();
                 }
@@ -105,12 +99,12 @@ public class Parser {
                 if (to.isEmpty()) {
                     throw new InvalidEventException();
                 }
-                fromDate = LocalDateTime.parse(from, this.parseFormatter);
-                toDate = LocalDateTime.parse(to, this.parseFormatter);
+                LocalDateTime fromDate = LocalDateTime.parse(from, parseFormatter);
+                LocalDateTime toDate = LocalDateTime.parse(to, parseFormatter);
+                return new Command(command, description, fromDate, toDate);
             } catch (NoSuchElementException e) {
                 throw new InvalidEventException();
             }
-            return new Command(command, description, fromDate, toDate);
         } else {
             // The user's prompt is not preceded by a valid command
             throw new UnknownCommandException();
