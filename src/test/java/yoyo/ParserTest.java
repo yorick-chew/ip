@@ -47,6 +47,14 @@ public class ParserTest {
     }
 
     @Test
+    public void interpretCommand_findInput_success() throws Exception {
+        Parser testParser = new Parser();
+        Command command = testParser.interpretCommand("find books today");
+        assertEquals("find", command.getCommand());
+        assertEquals("books today", command.getDescription());
+    }
+
+    @Test
     public void interpretCommand_todoInput_success() throws Exception {
         Parser testParser = new Parser();
         Command command = testParser.interpretCommand("todo Important work");
@@ -141,6 +149,26 @@ public class ParserTest {
         } catch (Exception e) {
             assertEquals("The user entered an invalid number as parameter for"
                     + "the mark, unmark or delete command.", e.getMessage());
+        }
+    }
+
+    @Test
+    public void interpretCommand_invalidFindInput_exceptionThrown() {
+        try {
+            Parser testParser = new Parser();
+            Command command = testParser.interpretCommand("find");
+            fail();
+        } catch (Exception e) {
+            assertEquals("The user entered an incomplete command to "
+                    + "find for tasks using keywords.", e.getMessage());
+        }
+        try {
+            Parser testParser = new Parser();
+            Command command = testParser.interpretCommand("find ");
+            fail();
+        } catch (Exception e) {
+            assertEquals("The user entered an incomplete command to "
+                    + "find for tasks using keywords.", e.getMessage());
         }
     }
 

@@ -81,6 +81,15 @@ public class Yoyo {
                     Task task = this.removeTask(taskNum);
                     ui.displayBotMessage(new String[]{"Gotcha, it's gone! I've deleted this task:",
                     task.toString(), "Now you have " + this.numOfTasks() + " tasks in the list."});
+                } else if (commandType.equals("find")) {
+                    // Yoyo finds all the tasks in its list that matches its keywords
+                    String keyword = userCommand.getDescription();
+                    TaskList filteredTasks = trackedTasks.filterTasks(keyword);
+                    String[] tasksToPrint = new String[filteredTasks.size()];
+                    for (int idx = 0; idx < filteredTasks.size(); idx++) {
+                        tasksToPrint[idx] = (idx + 1) + ". " + filteredTasks.get(idx);
+                    }
+                    ui.displayBotMessage(tasksToPrint);
                 } else if (commandType.equals("todo")) {
                     // Yoyo adds a new to-do to its list
                     String description = userCommand.getDescription();
@@ -113,6 +122,9 @@ public class Yoyo {
                         "understand..."});
             } catch (InvalidToDoException e) {
                 ui.displayBotMessage(new String[]{"Umm... The description of a todo "
+                        + "cannot be empty."});
+            } catch (InvalidFindException e) {
+                ui.displayBotMessage(new String[]{"Umm... The keywords for the find command "
                         + "cannot be empty."});
             } catch (InvalidDeadlineException e) {
                 ui.displayBotMessage(new String[]{"Umm... The description and by date "

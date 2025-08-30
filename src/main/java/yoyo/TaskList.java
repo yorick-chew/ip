@@ -57,6 +57,25 @@ public class TaskList {
         return task;
     }
 
+    /**
+     * Filters and returns a task list that contains only tasks
+     * with descriptions that include the keyword string
+     *
+     * @param keyword The string that all tasks in the returned TaskList must
+     *                contain in their description.
+     * @return The filtered TaskList consisting of only Tasks that contain
+     *         the keyword string.
+     */
+    public TaskList filterTasks(String keyword) {
+        ArrayList<Task> filteredTasks = new ArrayList<>();
+        for (Task task : tasks) {
+            if (task.getDescription().contains(keyword)) {
+                filteredTasks.add(task);
+            }
+        }
+        return new TaskList(filteredTasks);
+    }
+
     public int size() {
         return tasks.size();
     }
