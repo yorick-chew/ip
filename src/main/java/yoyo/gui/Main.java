@@ -1,4 +1,4 @@
-package yoyo;
+package yoyo.gui;
 
 import java.io.IOException;
 
@@ -7,6 +7,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+
+import yoyo.Yoyo;
+import yoyo.exception.MissingMemoryException;
 
 /**
  * A GUI for Yoyo using FXML.

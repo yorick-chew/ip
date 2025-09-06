@@ -1,4 +1,4 @@
-package yoyo;
+package yoyo.exception;
 
 public class InvalidEventException extends YoyoException {
     public InvalidEventException() {

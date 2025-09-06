@@ -1,4 +1,4 @@
-package yoyo;
+package yoyo.task;
 
 public class Task {
     protected String description;

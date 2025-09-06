@@ -43,7 +43,7 @@ test {
 }
 
 application {
-    mainClass.set("yoyo.Yoyo")
+    mainClass.set("yoyo.gui.Launcher")
 }
 
 shadowJar {

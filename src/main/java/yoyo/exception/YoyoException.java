@@ -1,4 +1,4 @@
-package yoyo;
+package yoyo.exception;
 
 /**
  * Represents exceptions that are specific to the Yoyo chatbot.

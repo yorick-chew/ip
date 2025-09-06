@@ -2,6 +2,8 @@ package yoyo;
 
 import java.util.ArrayList;
 
+import yoyo.task.Task;
+
 /**
  * Holds a list of Task objects.
  */

@@ -1,7 +1,9 @@
-package yoyo;
+package yoyo.task;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
+import yoyo.exception.InvalidEventException;
 
 /**
  * Represents a task with both a start date and time, and

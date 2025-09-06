@@ -1,4 +1,4 @@
-package yoyo;
+package yoyo.exception;
 
 public class InvalidFindException extends YoyoException {
     public InvalidFindException() {

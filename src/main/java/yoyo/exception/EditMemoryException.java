@@ -1,4 +1,4 @@
-package yoyo;
+package yoyo.exception;
 
 public class EditMemoryException extends YoyoException {
     public EditMemoryException() {

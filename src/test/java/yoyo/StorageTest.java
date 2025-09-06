@@ -1,14 +1,16 @@
 package yoyo;
 
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Array;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
+
+import yoyo.task.Deadline;
+import yoyo.task.Event;
+import yoyo.task.Task;
+import yoyo.task.ToDo;
 
 public class StorageTest {
     @Test

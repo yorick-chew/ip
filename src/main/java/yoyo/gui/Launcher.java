@@ -1,4 +1,4 @@
-package yoyo;
+package yoyo.gui;
 
 import javafx.application.Application;
 

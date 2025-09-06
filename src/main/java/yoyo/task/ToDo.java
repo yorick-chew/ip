@@ -1,4 +1,4 @@
-package yoyo;
+package yoyo.task;
 
 /**
  * Represents a task with a description.

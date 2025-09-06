@@ -10,6 +10,14 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import yoyo.exception.EditMemoryException;
+import yoyo.exception.InvalidEventException;
+import yoyo.exception.MissingMemoryException;
+import yoyo.task.Deadline;
+import yoyo.task.Event;
+import yoyo.task.Task;
+import yoyo.task.ToDo;
+
 /**
  * Handles saving and loading of tasks inputted into the chatbot.
  */
@@ -24,9 +32,6 @@ public class Storage {
      * @return A list of Tasks from the previous chatbot session.
      * @throws MissingMemoryException If there is a system error while creating
      *                                the data directory for the memory.txt file.
-     * @throws IOException If there is a system error while creating the
-     *                     memory.txt file used to store data to be remembered
-     *                     for future session.
      */
     public ArrayList<Task> load() throws MissingMemoryException {
         // Creates the data dir and memory.txt file if they do not exist

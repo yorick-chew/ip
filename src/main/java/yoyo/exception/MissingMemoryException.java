@@ -1,4 +1,4 @@
-package yoyo;
+package yoyo.exception;
 
 public class MissingMemoryException extends YoyoException {
     public MissingMemoryException() {
