@@ -44,7 +44,7 @@ public class Deadline extends Task {
      * Returns true if obj is also a Deadline and shares the
      * same description and by field as this Deadline object.
      *
-     * @param obj   The reference object with which to compare.
+     * @param obj The reference object with which to compare.
      * @return True if both objects are Deadlines that share the same fields
      *         for description and by.
      */

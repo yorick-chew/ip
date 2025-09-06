@@ -1,0 +1,66 @@
+.root {
+    main-color: #000000;       /* Create a looked-up color called "main-color" within root. */
+    text-color: #ffffff;
+    outline-color: #ffa12e;
+    -fx-background-color: main-color;
+    -fx-border-color: #33a7ff;
+    -fx-border-width: 0.75px;
+    -fx-border-radius: 2em 2em 2em 2em;
+}
+
+.text-field {
+    -fx-background-color: main-color;
+    -fx-background-radius: 2em 2em 2em 2em;
+    -fx-border-color: outline-color;
+    -fx-border-width: 0.75px;
+    -fx-border-radius: 2em 2em 2em 2em;
+    -fx-font: 15px System;
+    -fx-text-fill: text-color;
+}
+
+.button {
+    -fx-background-color: main-color;
+    -fx-background-radius: 2em 2em 2em 2em;
+    -fx-border-color: outline-color;
+    -fx-border-width: 0.75px;
+    -fx-border-radius: 2em 2em 2em 2em;
+    -fx-font: 15px System;
+    -fx-text-fill: outline-color;
+}
+
+.button:hover {
+    -fx-background-color: outline-color;
+    -fx-text-fill: main-color;
+    -fx-font: 16px System;
+}
+
+.button:pressed {
+    -fx-background-color: main-color;
+    -fx-text-fill: outline-color;
+}
+
+.scroll-pane,
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar {
+    -fx-font-size: 7px;  /* Change width of scroll bar. */
+    -fx-background-color: transparent;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: main-color;
+    -fx-background-radius: 1em;
+    -fx-border-color: text-color;
+    -fx-border-width: 0.5px;
+    -fx-border-radius: 2em 2em 2em 2em;
+}
+
+/* Hides the increment and decrement buttons. */
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-pref-height: 0;
+    -fx-opacity: 0;
+}
+

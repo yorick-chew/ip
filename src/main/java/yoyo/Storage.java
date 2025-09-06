@@ -28,7 +28,7 @@ public class Storage {
      *                     memory.txt file used to store data to be remembered
      *                     for future session.
      */
-    public ArrayList<Task> load() throws MissingMemoryException, IOException {
+    public ArrayList<Task> load() throws MissingMemoryException {
         // Creates the data dir and memory.txt file if they do not exist
         File dataDir = new File("data");
         dataDir.mkdir();
@@ -37,18 +37,22 @@ public class Storage {
         }
 
         File memory = new File(filePath);
-        memory.createNewFile();
+        try {
+            memory.createNewFile();
 
-        // Fill up taskLst with saved memory
-        ArrayList<Task> savedTasks = new ArrayList<>();
-        Scanner memoryScanner = new Scanner(memory);
+            // Fill up taskLst with saved memory
+            ArrayList<Task> savedTasks = new ArrayList<>();
+            Scanner memoryScanner = new Scanner(memory);
 
-        while (memoryScanner.hasNextLine()) {
-            Task newTask = this.parseTask(memoryScanner.nextLine());
+            while (memoryScanner.hasNextLine()) {
+                Task newTask = this.parseTask(memoryScanner.nextLine());
 
-            savedTasks.add(newTask);
+                savedTasks.add(newTask);
+            }
+            return savedTasks;
+        } catch (IOException e) {
+            throw new MissingMemoryException();
         }
-        return savedTasks;
     }
 
     /**

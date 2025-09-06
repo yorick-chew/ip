@@ -6,8 +6,7 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 /**
- * Parses through the user's input in the command line and
- * interprets the corresponding command requested by the user.
+ * Parses through user inputs and interprets the corresponding command requested by the user.
  */
 public class Parser {
     private final DateTimeFormatter parseFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
