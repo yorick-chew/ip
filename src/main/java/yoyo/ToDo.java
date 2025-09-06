@@ -31,7 +31,7 @@ public class ToDo extends Task {
      * Returns true if obj is also a ToDo and shares the
      * same description as this ToDo object.
      *
-     * @param obj   The reference object with which to compare.
+     * @param obj The reference object with which to compare.
      * @return True if both objects are ToDos that share the same fields
      *         for their description.
      */
