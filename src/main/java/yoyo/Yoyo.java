@@ -55,9 +55,11 @@ public class Yoyo {
      * @return Yoyo's response to the user's input message.
      */
     public String getResponse(String userInput) {
+        assert userInput != null : "userInput should not be null";
         try {
             Command userCommand = parser.interpretCommand(userInput);
             String commandType = userCommand.getCommand();
+            assert commandType != null : "commandType should not be null when processing a response";
 
             if (commandType.equals("bye")) {
                 // Yoyo says bye before quitting
@@ -74,22 +76,27 @@ public class Yoyo {
                 // Yoyo marks the task
                 int taskNum = userCommand.getTaskNum();
                 Task task = this.markAsDone(taskNum);
+                assert task != null : "Marked task should not be null";
                 return "Oh man, you're clearing them tasks like a pro!\nMarked it for you:\n   " + task;
             } else if (commandType.equals("unmark")) {
                 // Yoyo unmarks the task
                 int taskNum = userCommand.getTaskNum();
                 Task task = this.unmarkAsDone(taskNum);
+                assert task != null : "Unmarked task should not be null";
                 return "Bruh... Alright fine, I won't judge!\nUnmarked it for you:\n   " + task;
             } else if (commandType.equals("delete")) {
                 // Yoyo deletes the task from taskList
                 int taskNum = userCommand.getTaskNum();
                 Task task = this.removeTask(taskNum);
+                assert task != null : "Removed task should not be null";
                 return "Gotcha, it's gone! I've deleted this task:\n   " + task + "\nNow you have "
                         + this.numOfTasks() + " task(s) in the list.";
             } else if (commandType.equals("find")) {
                 // Yoyo finds all the tasks in its list that matches its keywords
                 String keyword = userCommand.getDescription();
                 TaskList filteredTasks = trackedTasks.filterTasks(keyword);
+                assert keyword != null : "keyword should not be null";
+                assert filteredTasks != null : "filteredTasks should not be null";
                 String response = "";
                 for (int idx = 0; idx < filteredTasks.size(); idx++) {
                     response += (idx + 1) + ". " + filteredTasks.get(idx) + "\n";
@@ -149,6 +156,7 @@ public class Yoyo {
     }
 
     private Task addTask(String description) throws EditMemoryException {
+        assert description != null : "description should not be null";
         ToDo newToDo = new ToDo(description);
         trackedTasks.addTask(newToDo);
         storage.updateMemory(trackedTasks);
@@ -156,6 +164,7 @@ public class Yoyo {
     }
 
     private Task addTask(String description, LocalDateTime by) throws EditMemoryException {
+        assert description != null && by != null : "description and by should not be null";
         Deadline newDeadline = new Deadline(description, by);
         trackedTasks.addTask(newDeadline);
         storage.updateMemory(trackedTasks);
@@ -164,6 +173,7 @@ public class Yoyo {
 
     private Task addTask(String description, LocalDateTime from, LocalDateTime to)
             throws EditMemoryException, InvalidEventException {
+        assert description != null && from != null && to != null : "description, from and to should not be null";
         Event newEvent = new Event(description, from, to);
         trackedTasks.addTask(newEvent);
         storage.updateMemory(trackedTasks);
@@ -171,27 +181,18 @@ public class Yoyo {
     }
 
     private Task removeTask(int taskNum) throws InvalidTaskException, EditMemoryException {
-        if (taskNum <= 0 || taskNum > this.numOfTasks()) {
-            throw new InvalidTaskException();
-        }
         Task task = trackedTasks.removeTask(taskNum);
         storage.updateMemory(trackedTasks);
         return task;
     }
 
     private Task markAsDone(int taskNum) throws InvalidTaskException, EditMemoryException {
-        if (taskNum <= 0 || taskNum > this.numOfTasks()) {
-            throw new InvalidTaskException();
-        }
         Task task = trackedTasks.markAsDone(taskNum);
         storage.updateMemory(trackedTasks);
         return task;
     }
 
     private Task unmarkAsDone(int taskNum) throws InvalidTaskException, EditMemoryException {
-        if (taskNum <= 0 || taskNum > this.numOfTasks()) {
-            throw new InvalidTaskException();
-        }
         Task task = trackedTasks.unmarkAsDone(taskNum);
         storage.updateMemory(trackedTasks);
         return task;
