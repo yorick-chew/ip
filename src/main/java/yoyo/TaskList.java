@@ -2,6 +2,8 @@ package yoyo;
 
 import java.util.ArrayList;
 
+import yoyo.exception.InvalidEventException;
+import yoyo.exception.InvalidTaskException;
 import yoyo.task.Task;
 
 /**
@@ -19,10 +21,14 @@ public class TaskList {
     }
 
     public Task get(int idx) {
+        assert idx >= 0 && idx < this.size() : "Methods calling get must pass in a valid idx";
         return tasks.get(idx);
     }
 
-    public Task removeTask(int taskNum) {
+    public Task removeTask(int taskNum) throws InvalidTaskException {
+        if (taskNum <= 0 || taskNum > this.size()) {
+            throw new InvalidTaskException();
+        }
         int taskIdx = taskNum - 1;
         return tasks.remove(taskIdx);
     }
@@ -34,7 +40,10 @@ public class TaskList {
      * @param taskNum The index of the selected task, starting from 1.
      * @return The taskNum-th task that was marked as done.
      */
-    public Task markAsDone(int taskNum) {
+    public Task markAsDone(int taskNum) throws InvalidTaskException {
+        if (taskNum <= 0 || taskNum > this.size()) {
+            throw new InvalidTaskException();
+        }
         Task task = getTaskFromNum(taskNum);
         task.markAsDone();
         return task;
@@ -47,7 +56,10 @@ public class TaskList {
      * @param taskNum The index of the selected task, starting from 1.
      * @return The taskNum-th task that was unmarked as done.
      */
-    public Task unmarkAsDone(int taskNum) {
+    public Task unmarkAsDone(int taskNum) throws InvalidTaskException {
+        if (taskNum <= 0 || taskNum > this.size()) {
+            throw new InvalidTaskException();
+        }
         Task task = getTaskFromNum(taskNum);
         task.unmarkAsDone();
         return task;

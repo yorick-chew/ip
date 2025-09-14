@@ -65,6 +65,7 @@ public class Yoyo {
      * @return Yoyo's response to the user's input message.
      */
     public String getResponse(String userInput) {
+        assert userInput != null : "userInput should not be null";
         try {
             Command userCommand = parser.interpretCommand(userInput);
             return executeCommand(userCommand);
@@ -209,6 +210,7 @@ public class Yoyo {
     }
 
     private Task addTask(String description) throws EditMemoryException {
+        assert description != null : "description should not be null";
         ToDo newToDo = new ToDo(description);
         trackedTasks.addTask(newToDo);
         storage.updateMemory(trackedTasks);
@@ -216,6 +218,7 @@ public class Yoyo {
     }
 
     private Task addTask(String description, LocalDateTime by) throws EditMemoryException {
+        assert description != null && by != null : "description and by should not be null";
         Deadline newDeadline = new Deadline(description, by);
         trackedTasks.addTask(newDeadline);
         storage.updateMemory(trackedTasks);
@@ -224,6 +227,7 @@ public class Yoyo {
 
     private Task addTask(String description, LocalDateTime from, LocalDateTime to)
             throws EditMemoryException, InvalidEventException {
+        assert description != null && from != null && to != null : "description, from and to should not be null";
         Event newEvent = new Event(description, from, to);
         trackedTasks.addTask(newEvent);
         storage.updateMemory(trackedTasks);
@@ -231,27 +235,18 @@ public class Yoyo {
     }
 
     private Task removeTask(int taskNum) throws InvalidTaskException, EditMemoryException {
-        if (taskNum <= 0 || taskNum > numOfTasks()) {
-            throw new InvalidTaskException();
-        }
         Task task = trackedTasks.removeTask(taskNum);
         storage.updateMemory(trackedTasks);
         return task;
     }
 
     private Task markAsDone(int taskNum) throws InvalidTaskException, EditMemoryException {
-        if (taskNum <= 0 || taskNum > numOfTasks()) {
-            throw new InvalidTaskException();
-        }
         Task task = trackedTasks.markAsDone(taskNum);
         storage.updateMemory(trackedTasks);
         return task;
     }
 
     private Task unmarkAsDone(int taskNum) throws InvalidTaskException, EditMemoryException {
-        if (taskNum <= 0 || taskNum > numOfTasks()) {
-            throw new InvalidTaskException();
-        }
         Task task = trackedTasks.unmarkAsDone(taskNum);
         storage.updateMemory(trackedTasks);
         return task;
