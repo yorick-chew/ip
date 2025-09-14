@@ -10,6 +10,9 @@ import yoyo.exception.InvalidEventException;
  * end date and time.
  */
 public class Event extends Task {
+    private static final String DISPLAY_DATETIME_FORMAT = "MMM dd yyyy, h:mm a";
+    private static final String STORAGE_DATETIME_FORMAT = "yyyy-MM-dd HH:mm";
+
     protected LocalDateTime from;
     protected LocalDateTime to;
     
@@ -49,7 +52,7 @@ public class Event extends Task {
      */
     @Override
     public String getSaveString() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(STORAGE_DATETIME_FORMAT);
         String formattedFromDate = from.format(formatter);
         String formattedToDate = to.format(formatter);
         return "E|" + super.getSaveString() + "|" + formattedFromDate + "|"
@@ -69,17 +72,18 @@ public class Event extends Task {
     public boolean equals(Object obj) {
         if (obj instanceof Event) {
             Event event = (Event) obj;
-            return event.getDescription().equals(this.getDescription())
-                    && (event.getFrom().equals(from))
-                    && (event.getTo().equals(to))
-                    && (event.isDone() == this.isDone());
+            boolean isDescriptionEqual = event.getDescription().equals(this.getDescription());
+            boolean isFromEqual = event.getFrom().equals(from);
+            boolean isToEqual = event.getTo().equals(to);
+            boolean isIsDoneEqual = (event.isDone() == this.isDone());
+            return  isDescriptionEqual && isFromEqual && isToEqual && isIsDoneEqual;
         }
         return false;
     }
 
     @Override
     public String toString() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd yyyy, h:mm a");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(Event.DISPLAY_DATETIME_FORMAT);
         String formattedFromDate = from.format(formatter);
         String formattedToDate = to.format(formatter);
         return "[E]" + super.toString() + " (from: " + formattedFromDate

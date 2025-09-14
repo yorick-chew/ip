@@ -12,10 +12,6 @@ import yoyo.task.Task;
 public class TaskList {
     private ArrayList<Task> tasks;
 
-    public TaskList() {
-        tasks = new ArrayList<>();
-    }
-
     public TaskList(ArrayList<Task> tasks) {
         this.tasks = tasks;
     }
@@ -48,8 +44,7 @@ public class TaskList {
         if (taskNum <= 0 || taskNum > this.size()) {
             throw new InvalidTaskException();
         }
-        int taskIdx = taskNum - 1;
-        Task task = tasks.get(taskIdx);
+        Task task = getTaskFromNum(taskNum);
         task.markAsDone();
         return task;
     }
@@ -65,8 +60,7 @@ public class TaskList {
         if (taskNum <= 0 || taskNum > this.size()) {
             throw new InvalidTaskException();
         }
-        int taskIdx = taskNum - 1;
-        Task task = tasks.get(taskIdx);
+        Task task = getTaskFromNum(taskNum);
         task.unmarkAsDone();
         return task;
     }
@@ -92,5 +86,11 @@ public class TaskList {
 
     public int size() {
         return tasks.size();
+    }
+
+    /** Get the taskNum-th task in the task list **/
+    private Task getTaskFromNum(int taskNum) {
+        int taskIdx = taskNum - 1;
+        return tasks.get(taskIdx);
     }
 }

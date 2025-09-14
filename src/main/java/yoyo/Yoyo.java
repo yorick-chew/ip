@@ -21,6 +21,16 @@ import yoyo.task.ToDo;
  * through commands in the terminal.
  */
 public class Yoyo {
+    private static final String BYE_COMMAND = "bye";
+    private static final String LIST_COMMAND = "list";
+    private static final String MARK_COMMAND = "mark";
+    private static final String UNMARK_COMMAND = "unmark";
+    private static final String DELETE_COMMAND = "delete";
+    private static final String FIND_COMMAND = "find";
+    private static final String TODO_COMMAND = "todo";
+    private static final String DEADLINE_COMMAND = "deadline";
+    private static final String EVENT_COMMAND = "event";
+
     private final Storage storage;
     private final TaskList trackedTasks;
     // Detects the user's command and performs the appropriate action with formatting
@@ -45,7 +55,7 @@ public class Yoyo {
 
     /** Returns Yoyo's welcome greeting when the user begins using Yoyo. */
     public String getGreeting() {
-        return "Yo! The name's Yoyo.\nWhat can I do for you?";
+        return formatResponse("Yo! The name's Yoyo.", "What can I do for you?");
     }
 
     /**
@@ -58,101 +68,145 @@ public class Yoyo {
         assert userInput != null : "userInput should not be null";
         try {
             Command userCommand = parser.interpretCommand(userInput);
-            String commandType = userCommand.getCommand();
-            assert commandType != null : "commandType should not be null when processing a response";
-
-            if (commandType.equals("bye")) {
-                // Yoyo says bye before quitting
-                isTerminated = true;
-                return "Aww, bye! See ya later.";
-            } else if (commandType.equals("list")) {
-                // Yoyo lists out what it wrote in its list
-                String response = "";
-                for (int idx = 0; idx < this.numOfTasks(); idx++) {
-                    response += (idx + 1) + ". " + trackedTasks.get(idx) + "\n";
-                }
-                return response;
-            } else if (commandType.equals("mark")) {
-                // Yoyo marks the task
-                int taskNum = userCommand.getTaskNum();
-                Task task = this.markAsDone(taskNum);
-                assert task != null : "Marked task should not be null";
-                return "Oh man, you're clearing them tasks like a pro!\nMarked it for you:\n   " + task;
-            } else if (commandType.equals("unmark")) {
-                // Yoyo unmarks the task
-                int taskNum = userCommand.getTaskNum();
-                Task task = this.unmarkAsDone(taskNum);
-                assert task != null : "Unmarked task should not be null";
-                return "Bruh... Alright fine, I won't judge!\nUnmarked it for you:\n   " + task;
-            } else if (commandType.equals("delete")) {
-                // Yoyo deletes the task from taskList
-                int taskNum = userCommand.getTaskNum();
-                Task task = this.removeTask(taskNum);
-                assert task != null : "Removed task should not be null";
-                return "Gotcha, it's gone! I've deleted this task:\n   " + task + "\nNow you have "
-                        + this.numOfTasks() + " task(s) in the list.";
-            } else if (commandType.equals("find")) {
-                // Yoyo finds all the tasks in its list that matches its keywords
-                String keyword = userCommand.getDescription();
-                TaskList filteredTasks = trackedTasks.filterTasks(keyword);
-                assert keyword != null : "keyword should not be null";
-                assert filteredTasks != null : "filteredTasks should not be null";
-                String response = "";
-                for (int idx = 0; idx < filteredTasks.size(); idx++) {
-                    response += (idx + 1) + ". " + filteredTasks.get(idx) + "\n";
-                }
-                return response;
-            } else if (commandType.equals("todo")) {
-                // Yoyo adds a new to-do to its list
-                String description = userCommand.getDescription();
-                Task task = this.addTask(description);
-                return "Alright-y, I've added your task:\n   " + task + "\nNow you have "
-                        + this.numOfTasks() + " task(s) in the list.";
-            } else if (commandType.equals("deadline")) {
-                // Yoyo adds a new deadline to its list
-                String description = userCommand.getDescription();
-                LocalDateTime byDate = userCommand.getDateOne();
-                Task task = this.addTask(description, byDate);
-                return "Alright-y, I've added your task:\n   " + task + "\nNow you have "
-                        + this.numOfTasks() + " task(s) in the list.";
-            } else if (commandType.equals("event")) {
-                // Yoyo adds a new event to its list
-                String description = userCommand.getDescription();
-                LocalDateTime fromDate = userCommand.getDateOne();
-                LocalDateTime toDate = userCommand.getDateTwo();
-                Task task = this.addTask(description, fromDate, toDate);
-                return "Alright-y, I've added your task:\n   " + task + "\nNow you have "
-                        + this.numOfTasks() + " task(s) in the list.";
-            } else {
-                // The user's prompt is not preceded by a valid command
-                throw new UnknownCommandException();
-            }
+            return executeCommand(userCommand);
         } catch (InvalidTaskException e) {
-            return "Umm... You've entered an invalid task number.";
+            return formatResponse("Umm... You've entered an invalid task number.");
         } catch (UnknownCommandException e) {
-            return "Umm... What did you just say? I genuinely don't understand...";
+            return formatResponse("Umm... What did you just say? I genuinely don't understand...");
         } catch (InvalidToDoException e) {
-            return "Umm... The description of a todo cannot be empty.";
+            return formatResponse("Umm... The description of a todo cannot be empty.");
         } catch (InvalidFindException e) {
-            return "Umm... The keywords for the find command cannot be empty.";
+            return formatResponse("Umm... The keywords for the find command cannot be empty.");
         } catch (InvalidDeadlineException e) {
-            return "Umm... The description and by date of a deadline cannot be empty.";
+            return formatResponse("Umm... The description and by date of a deadline cannot be empty.");
         } catch (InvalidEventException e) {
-            return "Umm... Your prompt doesn't sound right. Check that the description, from-date and to-date "
-                    + "of your event is not empty. Oh, and double check that your to-date happens "
-                    + "after your from-date!";
+            return formatResponse("Umm... Your prompt doesn't sound right. Check that the description, "
+                    + "from-date and to-date of your event is not empty. Oh, and double check that "
+                    + "your to-date happens after your from-date!");
         } catch (EditMemoryException e) {
-            return "Uh-oh... My brain broke for a moment there. I had a problem keeping track of all your tasks."
-                    + "You may find that some tasks are not properly saved when you reboot me...";
+            return formatResponse("Uh-oh... My brain broke for a moment there. I had a problem "
+                    + "keeping track of all your tasks. You may find that some tasks are not properly saved when "
+                    + "you reboot me...");
         } catch (DateTimeParseException e) {
-            return "Umm... I didn't want to say this but you've entered the date and time in the wrong format"
-                    + " or a date that doesn't exist!\nJust remember: yyyy-MM-dd HH:mm.";
+            return formatResponse("Umm... I didn't want to say this but you've entered the date "
+                    + "and time in the wrong format or a date that doesn't exist!",
+                    "Just remember: yyyy-MM-dd HH:mm.");
         }
     }
 
     /** Indicates if the chatbot program has been terminated by the user's command 'bye'. */
     public boolean isTerminated() {
         return isTerminated;
+    }
+
+    /** Executes the corresponding userCommand and generates Yoyo's response **/
+    private String executeCommand(Command userCommand) throws InvalidTaskException, EditMemoryException,
+            InvalidEventException, UnknownCommandException {
+        String commandType = userCommand.getCommand();
+        return switch (commandType) {
+            case Yoyo.BYE_COMMAND -> executeByeCommand();
+            case Yoyo.LIST_COMMAND -> executeListCommand();
+            case Yoyo.MARK_COMMAND -> executeMarkCommand(userCommand);
+            case Yoyo.UNMARK_COMMAND -> executeUnmarkCommand(userCommand);
+            case Yoyo.DELETE_COMMAND -> executeDeleteCommand(userCommand);
+            case Yoyo.FIND_COMMAND -> executeFindCommand(userCommand);
+            case Yoyo.TODO_COMMAND -> executeToDoCommand(userCommand);
+            case Yoyo.DEADLINE_COMMAND -> executeDeadlineCommand(userCommand);
+            case Yoyo.EVENT_COMMAND -> executeEventCommand(userCommand);
+            default -> throw new UnknownCommandException();
+        };
+    }
+
+    private String executeByeCommand() {
+        // Terminates the program
+        isTerminated = true;
+        return formatResponse("Aww, bye! See ya later.");
+    }
+
+    private String executeListCommand() {
+        return getListedResponse(trackedTasks);
+    }
+
+    private String executeMarkCommand(Command userCommand) throws InvalidTaskException, EditMemoryException {
+        // Yoyo marks the task
+        int taskNum = userCommand.getTaskNum();
+        Task task = markAsDone(taskNum);
+        assert task != null : "Marked task should not be null";
+        return formatResponse("Oh man, you're clearing them tasks like a pro!", "Marked it for you:",
+                "   " + task);
+    }
+
+    private String executeUnmarkCommand(Command userCommand) throws InvalidTaskException, EditMemoryException {
+        // Yoyo unmarks the task
+        int taskNum = userCommand.getTaskNum();
+        Task task = unmarkAsDone(taskNum);
+        assert task != null : "Unmarked task should not be null";
+        return formatResponse("Bruh... Alright fine, I won't judge!", "Unmarked it for you:",
+                "   " + task);
+    }
+
+    private String executeDeleteCommand(Command userCommand) throws InvalidTaskException, EditMemoryException {
+        // Yoyo deletes the task from taskList
+        int taskNum = userCommand.getTaskNum();
+        Task task = removeTask(taskNum);
+        assert task != null : "Removed task should not be null";
+        return formatResponse("Gotcha, it's gone! I've deleted this task:", "   " + task,
+                "Now you have " + numOfTasks() + " task(s) in the list.");
+    }
+
+    private String executeFindCommand(Command userCommand) {
+        // Yoyo finds all the tasks in its list that matches its keywords
+        String keyword = userCommand.getDescription();
+        TaskList filteredTasks = trackedTasks.filterTasks(keyword);
+        assert keyword != null : "keyword should not be null";
+        assert filteredTasks != null : "filteredTasks should not be null";
+        return getListedResponse(filteredTasks);
+    }
+
+    private String executeToDoCommand(Command userCommand) throws EditMemoryException {
+        // Yoyo adds a new to-do to its list
+        String description = userCommand.getDescription();
+        Task task = addTask(description);
+        return formatResponse("Alright-y, I've added your task:", "   " + task, "Now you have "
+                + numOfTasks() + " task(s) in the list.");
+    }
+
+    private String executeDeadlineCommand(Command userCommand) throws EditMemoryException {
+        // Yoyo adds a new deadline to its list
+        String description = userCommand.getDescription();
+        LocalDateTime byDate = userCommand.getDateOne();
+        Task task = addTask(description, byDate);
+        return formatResponse("Alright-y, I've added your task:", "   " + task, "Now you have "
+                + numOfTasks() + " task(s) in the list.");
+    }
+
+    private String executeEventCommand(Command userCommand) throws EditMemoryException, InvalidEventException {
+        // Yoyo adds a new event to its list
+        String description = userCommand.getDescription();
+        LocalDateTime fromDate = userCommand.getDateOne();
+        LocalDateTime toDate = userCommand.getDateTwo();
+        Task task = addTask(description, fromDate, toDate);
+        return formatResponse("Alright-y, I've added your task:", "   " + task, "Now you have "
+                + numOfTasks() + " task(s) in the list.");
+    }
+
+    /** Formats the given list into Yoyo's response format **/
+    private String getListedResponse(TaskList tasksToList) {
+        // Yoyo lists out what it wrote in the list
+        String response = "";
+        for (int idx = 0; idx < tasksToList.size(); idx++) {
+            response += (idx + 1) + ". " + tasksToList.get(idx) + "\n";
+        }
+        return response;
+    }
+
+    /** Formats each string in responseLines into its own line in Yoyo's response **/
+    private String formatResponse(String... responseLines) {
+        String response = "";
+        for (String responseLine : responseLines) {
+            response += responseLine + "\n";
+        }
+        return response;
     }
 
     private Task addTask(String description) throws EditMemoryException {

@@ -16,7 +16,24 @@ import yoyo.exception.UnknownCommandException;
  * Parses through user inputs and interprets the corresponding command requested by the user.
  */
 public class Parser {
-    private final DateTimeFormatter parseFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private static final String BYE_COMMAND = "bye";
+    private static final String LIST_COMMAND = "list";
+    private static final String MARK_COMMAND = "mark";
+    private static final String UNMARK_COMMAND = "unmark";
+    private static final String DELETE_COMMAND = "delete";
+    private static final String FIND_COMMAND = "find";
+    private static final String TODO_COMMAND = "todo";
+    private static final String DEADLINE_COMMAND = "deadline";
+    private static final String EVENT_COMMAND = "event";
+
+    private static final String BY_DELIMITER = " /by ";
+    private static final String FROM_DELIMITER = " /from ";
+    private static final String TO_DELIMITER = " /to ";
+
+    private static final String INPUT_DATETIME_FORMAT = "yyyy-MM-dd HH:mm";
+
+    private final DateTimeFormatter parseFormatter = DateTimeFormatter
+            .ofPattern(Parser.INPUT_DATETIME_FORMAT);
 
     /**
      * Interprets the given user command, userPrompt, and
@@ -39,91 +56,112 @@ public class Parser {
             InvalidDeadlineException, InvalidEventException, UnknownCommandException,
             InvalidTaskException, InvalidFindException {
         Scanner commandScanner = new Scanner(userPrompt);
-        String command;
         try {
-            command = commandScanner.next();
+            String command = commandScanner.next();
+            if (command.equals(Parser.BYE_COMMAND) || command.equals(Parser.LIST_COMMAND)) {
+                return createBasicCommand(command);
+            } else if (command.equals(Parser.MARK_COMMAND) || command.equals(Parser.UNMARK_COMMAND)
+                    || command.equals(Parser.DELETE_COMMAND)) {
+                return createNumberedCommand(command, commandScanner);
+            } else if (command.equals(Parser.FIND_COMMAND)) {
+                return createFindCommand(commandScanner);
+            } else if (command.equals(Parser.TODO_COMMAND)) {
+                return createToDoCommand(commandScanner);
+            } else if (command.equals(Parser.DEADLINE_COMMAND)) {
+                return createDeadlineCommand(commandScanner);
+            } else if (command.equals(Parser.EVENT_COMMAND)) {
+                return createEventCommand(commandScanner);
+            } else {
+                // The user's prompt is not preceded by a valid command
+                throw new UnknownCommandException();
+            }
         } catch (NoSuchElementException e) {
             throw new UnknownCommandException();
         }
-        if (command.equals("bye")) {
-            return new Command("bye");
-        } else if (command.equals("list")) {
-            return new Command("list");
-        } else if (command.equals("mark") || command.equals("unmark")
-                || command.equals("delete")) {
-            try {
-                int taskNum = commandScanner.nextInt();
-                return new Command(command, taskNum);
-            } catch (NoSuchElementException e) {
-                throw new InvalidTaskException();
-            }
-        } else if (command.equals("find")) {
-            try {
-                String keyword = commandScanner.nextLine().substring(1);
-                if (keyword.isEmpty()) {
-                    throw new InvalidFindException();
-                }
-                return new Command("find", keyword);
-            } catch (NoSuchElementException e) {
+    }
+
+    private Command createBasicCommand(String command) {
+        return new Command(command);
+    }
+
+    private Command createNumberedCommand(String command, Scanner commandScanner) throws InvalidTaskException {
+        try {
+            int taskNum = commandScanner.nextInt();
+            return new Command(command, taskNum);
+        } catch (NoSuchElementException e) {
+            throw new InvalidTaskException();
+        }
+    }
+
+    private Command createFindCommand(Scanner commandScanner) throws InvalidFindException {
+        try {
+            String keyword = commandScanner.nextLine().substring(1);
+            if (keyword.isEmpty()) {
                 throw new InvalidFindException();
             }
-        } else if (command.equals("todo")) {
-            try {
-                String description = commandScanner.nextLine().substring(1);
-                if (description.isEmpty()) {
-                    throw new InvalidToDoException();
-                }
-                return new Command("todo", description);
-            } catch (NoSuchElementException e) {
+            return new Command(Parser.FIND_COMMAND, keyword);
+        } catch (NoSuchElementException e) {
+            throw new InvalidFindException();
+        }
+    }
+
+    private Command createToDoCommand(Scanner commandScanner) throws InvalidToDoException {
+        try {
+            String description = commandScanner.nextLine().substring(1);
+            if (description.isEmpty()) {
                 throw new InvalidToDoException();
             }
-        } else if (command.equals("deadline")) {
-            try {
-                commandScanner.useDelimiter(" /by ");
-                String description = commandScanner.next().substring(1);
-                if (description.isEmpty()) {
-                    throw new InvalidDeadlineException();
-                }
-                commandScanner.reset();
-                commandScanner.next();
-                String by = commandScanner.nextLine().substring(1);
-                if (by.isEmpty()) {
-                    throw new InvalidDeadlineException();
-                }
-                LocalDateTime byDate = LocalDateTime.parse(by, parseFormatter);
-                return new Command(command, description, byDate);
-            } catch (NoSuchElementException e) {
+            return new Command(Parser.TODO_COMMAND, description);
+        } catch (NoSuchElementException e) {
+            throw new InvalidToDoException();
+        }
+    }
+
+    private Command createDeadlineCommand(Scanner commandScanner) throws InvalidDeadlineException {
+        try {
+            commandScanner.useDelimiter(Parser.BY_DELIMITER);
+            String description = commandScanner.next().substring(1);
+            if (description.isEmpty()) {
                 throw new InvalidDeadlineException();
             }
-        } else if (command.equals("event")) {
-            try {
-                commandScanner.useDelimiter(" /from ");
-                String description = commandScanner.next().substring(1);
-                if (description.isEmpty()) {
-                    throw new InvalidEventException();
-                }
-                commandScanner.reset();
-                commandScanner.next();
-                commandScanner.useDelimiter(" /to ");
-                String from = commandScanner.next().substring(1);
-                if (from.isEmpty()) {
-                    throw new InvalidEventException();
-                }
-                commandScanner.reset();
-                commandScanner.next();
-                String to = commandScanner.nextLine().substring(1);
-                if (to.isEmpty()) {
-                    throw new InvalidEventException();
-                }
-                LocalDateTime fromDate = LocalDateTime.parse(from, parseFormatter);
-                LocalDateTime toDate = LocalDateTime.parse(to, parseFormatter);
-                return new Command(command, description, fromDate, toDate);
-            } catch (NoSuchElementException e) {
+            commandScanner.reset();
+            commandScanner.next();
+            String by = commandScanner.nextLine().substring(1);
+            if (by.isEmpty()) {
+                throw new InvalidDeadlineException();
+            }
+            LocalDateTime byDate = LocalDateTime.parse(by, parseFormatter);
+            return new Command(Parser.DEADLINE_COMMAND, description, byDate);
+        } catch (NoSuchElementException e) {
+            throw new InvalidDeadlineException();
+        }
+    }
+
+    private Command createEventCommand(Scanner commandScanner) throws InvalidEventException {
+        try {
+            commandScanner.useDelimiter(Parser.FROM_DELIMITER);
+            String description = commandScanner.next().substring(1);
+            if (description.isEmpty()) {
                 throw new InvalidEventException();
             }
-        } else {
-            // The user's prompt is not preceded by a valid command
-            throw new UnknownCommandException();
+            commandScanner.reset();
+            commandScanner.next();
+            commandScanner.useDelimiter(Parser.TO_DELIMITER);
+            String from = commandScanner.next().substring(1);
+            if (from.isEmpty()) {
+                throw new InvalidEventException();
+            }
+            commandScanner.reset();
+            commandScanner.next();
+            String to = commandScanner.nextLine().substring(1);
+            if (to.isEmpty()) {
+                throw new InvalidEventException();
+            }
+            LocalDateTime fromDate = LocalDateTime.parse(from, parseFormatter);
+            LocalDateTime toDate = LocalDateTime.parse(to, parseFormatter);
+            return new Command(Parser.EVENT_COMMAND, description, fromDate, toDate);
+        } catch (NoSuchElementException e) {
+            throw new InvalidEventException();
         }
     }
 }

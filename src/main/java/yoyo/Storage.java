@@ -13,6 +13,7 @@ import java.util.Scanner;
 import yoyo.exception.EditMemoryException;
 import yoyo.exception.InvalidEventException;
 import yoyo.exception.MissingMemoryException;
+import yoyo.exception.YoyoException;
 import yoyo.task.Deadline;
 import yoyo.task.Event;
 import yoyo.task.Task;
@@ -22,8 +23,21 @@ import yoyo.task.ToDo;
  * Handles saving and loading of tasks inputted into the chatbot.
  */
 public class Storage {
-    private final String filePath = "data/memory.txt";
-    private final DateTimeFormatter parseFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private static final String TODO_TYPE = "T";
+    private static final String DEADLINE_TYPE = "D";
+    private static final String EVENT_TYPE = "E";
+
+    private static final String DIRECTORY_NAME = "data";
+    private static final String SAVEFILE_NAME = "memory.txt";
+
+    private static final String PARSE_DELIMITER = "\\|";
+
+    private static final String STORAGE_DATETIME_FORMAT = "yyyy-MM-dd HH:mm";
+
+    private final String filePath = Storage.DIRECTORY_NAME + "/" + Storage.SAVEFILE_NAME;
+    private final DateTimeFormatter parseFormatter = DateTimeFormatter
+            .ofPattern(Storage.STORAGE_DATETIME_FORMAT);
+
 
     /**
      * Loads data of tasks inputted into the chatbot during previous
@@ -35,29 +49,9 @@ public class Storage {
      */
     public ArrayList<Task> load() throws MissingMemoryException {
         // Creates the data dir and memory.txt file if they do not exist
-        File dataDir = new File("data");
-        dataDir.mkdir();
-        if (!(dataDir.exists())) {
-            throw new MissingMemoryException();
-        }
-
-        File memory = new File(filePath);
-        try {
-            memory.createNewFile();
-
-            // Fill up taskLst with saved memory
-            ArrayList<Task> savedTasks = new ArrayList<>();
-            Scanner memoryScanner = new Scanner(memory);
-
-            while (memoryScanner.hasNextLine()) {
-                Task newTask = this.parseTask(memoryScanner.nextLine());
-
-                savedTasks.add(newTask);
-            }
-            return savedTasks;
-        } catch (IOException e) {
-            throw new MissingMemoryException();
-        }
+        createDirectory(Storage.DIRECTORY_NAME);
+        File memory = createMemoryFile(filePath);
+        return populateTaskList(memory);
     }
 
     /**
@@ -69,38 +63,18 @@ public class Storage {
      *                 a previous session.
      * @return A Task that was saved from the previous session with the chatbot.
      */
-    public Task parseTask(String taskLine) {
-        String[] taskDetails = taskLine.split("\\|");
+    public Task parseTask(String taskLine) throws YoyoException {
+        String[] taskDetails = taskLine.split(Storage.PARSE_DELIMITER);
         String taskType = taskDetails[0];
-        boolean isMarked = Boolean.parseBoolean(taskDetails[1]);
-        String description = taskDetails[2];
-        if (taskType.equals("T")) {
-            ToDo newToDo = new ToDo(description);
-            if (isMarked) {
-                newToDo.markAsDone();
-            }
-            return newToDo;
-        } else if (taskType.equals("D")) {
-            String by = taskDetails[3];
-            LocalDateTime byDate = LocalDateTime.parse(by, parseFormatter);
-            Deadline newDeadline = new Deadline(description, byDate);
-            if (isMarked) {
-                newDeadline.markAsDone();
-            }
-            return newDeadline;
+
+        if (taskType.equals(Storage.TODO_TYPE)) {
+            return parseToDo(taskDetails);
+        } else if (taskType.equals(Storage.DEADLINE_TYPE)) {
+            return parseDeadline(taskDetails);
+        } else if (taskType.equals(Storage.EVENT_TYPE)) {
+            return parseEvent(taskDetails);
         } else {
-            String from = taskDetails[3];
-            String to = taskDetails[4];
-            LocalDateTime fromDate = LocalDateTime.parse(from, parseFormatter);
-            LocalDateTime toDate = LocalDateTime.parse(to, parseFormatter);
-            try {
-                return new Event(description, fromDate, toDate);
-            } catch (InvalidEventException e) {
-                // Do nothing as a correct memory.txt file will have only recorded
-                // valid events, assuming that no user edited this file.
-                throw new RuntimeException("This exception should not be reached unless a"
-                        + "user edited the memory.txt file.", e);
-            }
+            throw new YoyoException("Unknown task type parsed.");
         }
     }
 
@@ -116,11 +90,92 @@ public class Storage {
         try {
             FileWriter fw = new FileWriter(filePath);
             for (int idx = 0; idx < tasksToSave.size(); idx++) {
-                fw.write(tasksToSave.get(idx).getSaveString() + System.lineSeparator());
+                Task taskToSave = tasksToSave.get(idx);
+                fw.write(taskToSave.getSaveString() + System.lineSeparator());
             }
             fw.close();
         } catch (IOException e) {
             throw new EditMemoryException();
+        }
+    }
+
+    private void createDirectory(String dirName) throws MissingMemoryException {
+        File dataDir = new File(dirName);
+        dataDir.mkdir();
+        if (!(dataDir.exists())) {
+            throw new MissingMemoryException();
+        }
+    }
+
+    private File createMemoryFile(String filePath) throws MissingMemoryException {
+        File memory = new File(filePath);
+        try {
+            memory.createNewFile();
+        } catch (IOException e) {
+            throw new MissingMemoryException();
+        }
+        return memory;
+    }
+
+    private ArrayList<Task> populateTaskList(File memory) throws MissingMemoryException {
+        try {
+            // Fill up taskLst with saved memory
+            ArrayList<Task> savedTasks = new ArrayList<>();
+            Scanner memoryScanner = new Scanner(memory);
+
+            while (memoryScanner.hasNextLine()) {
+                try {
+                    Task newTask = parseTask(memoryScanner.nextLine());
+                    savedTasks.add(newTask);
+                } catch (YoyoException e) {
+                    // Ignore the invalid task and continue parsing.
+                }
+            }
+            return savedTasks;
+        } catch (IOException e) {
+            throw new MissingMemoryException();
+        }
+    }
+
+    private ToDo parseToDo(String[] taskDetails) {
+        boolean isMarked = Boolean.parseBoolean(taskDetails[1]);
+        String description = taskDetails[2];
+
+        ToDo newToDo = new ToDo(description);
+        if (isMarked) {
+            newToDo.markAsDone();
+        }
+        return newToDo;
+    }
+
+    private Deadline parseDeadline(String[] taskDetails) {
+        boolean isMarked = Boolean.parseBoolean(taskDetails[1]);
+        String description = taskDetails[2];
+        String by = taskDetails[3];
+
+        LocalDateTime byDate = LocalDateTime.parse(by, parseFormatter);
+        Deadline newDeadline = new Deadline(description, byDate);
+        if (isMarked) {
+            newDeadline.markAsDone();
+        }
+        return newDeadline;
+    }
+
+    private Event parseEvent(String[] taskDetails) {
+        boolean isMarked = Boolean.parseBoolean(taskDetails[1]);
+        String description = taskDetails[2];
+        String from = taskDetails[3];
+        String to = taskDetails[4];
+
+        LocalDateTime fromDate = LocalDateTime.parse(from, parseFormatter);
+        LocalDateTime toDate = LocalDateTime.parse(to, parseFormatter);
+        try {
+            return new Event(description, fromDate, toDate);
+        } catch (InvalidEventException e) {
+            // Do nothing as a correct memory.txt file will have only recorded
+            // valid events, assuming that no user edited this file.
+            throw new RuntimeException("This exception should not be reached unless a"
+                    + "user edited the memory.txt file.", e);
         }
     }
 }

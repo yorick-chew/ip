@@ -7,6 +7,9 @@ import java.time.format.DateTimeFormatter;
  * Represents a task with a due date and time.
  */
 public class Deadline extends Task {
+    private static final String DISPLAY_DATETIME_FORMAT = "MMM dd yyyy, h:mm a";
+    private static final String STORAGE_DATETIME_FORMAT = "yyyy-MM-dd HH:mm";
+
     protected LocalDateTime by;
 
     /**
@@ -34,7 +37,7 @@ public class Deadline extends Task {
      */
     @Override
     public String getSaveString() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(Deadline.STORAGE_DATETIME_FORMAT);
         String formattedDate = by.format(formatter);
         return "D|" + super.getSaveString() + "|" + formattedDate;
     }
@@ -52,16 +55,17 @@ public class Deadline extends Task {
     public boolean equals(Object obj) {
         if (obj instanceof Deadline) {
             Deadline deadline = (Deadline) obj;
-            return deadline.getDescription().equals(this.getDescription())
-                    && (deadline.getBy().equals(by))
-                    && (deadline.isDone()) == this.isDone();
+            boolean isDescriptionEqual = deadline.getDescription().equals(this.getDescription());
+            boolean isByEqual = deadline.getBy().equals(by);
+            boolean isIsDoneEqual = (deadline.isDone() == this.isDone());
+            return isDescriptionEqual && isByEqual && isIsDoneEqual;
         }
         return false;
     }
 
     @Override
     public String toString() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd yyyy, h:mm a");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(Deadline.DISPLAY_DATETIME_FORMAT);
         String formattedDate = by.format(formatter);
         return "[D]" + super.toString() + " (by: " + formattedDate + ")";
     }
