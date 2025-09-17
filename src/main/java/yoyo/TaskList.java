@@ -2,7 +2,6 @@ package yoyo;
 
 import java.util.ArrayList;
 
-import yoyo.exception.InvalidEventException;
 import yoyo.exception.InvalidTaskException;
 import yoyo.task.Task;
 

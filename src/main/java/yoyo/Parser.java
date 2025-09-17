@@ -16,6 +16,7 @@ import yoyo.exception.UnknownCommandException;
  * Parses through user inputs and interprets the corresponding command requested by the user.
  */
 public class Parser {
+    // No shortform bye command to prevent accidentally exiting the program
     private static final String BYE_COMMAND = "bye";
     private static final String LIST_COMMAND = "list";
     private static final String MARK_COMMAND = "mark";
@@ -23,8 +24,18 @@ public class Parser {
     private static final String DELETE_COMMAND = "delete";
     private static final String FIND_COMMAND = "find";
     private static final String TODO_COMMAND = "todo";
+    // No shortform delete command to prevent accidental deletion
     private static final String DEADLINE_COMMAND = "deadline";
     private static final String EVENT_COMMAND = "event";
+
+    private static final String SHORT_LIST_COMMAND = "l";
+    private static final String SHORT_MARK_COMMAND = "m";
+    private static final String SHORT_UNMARK_COMMAND = "um";
+    private static final String SHORT_FIND_COMMAND = "f";
+    private static final String SHORT_TODO_COMMAND = "t";
+    private static final String SHORT_DEADLINE_COMMAND = "d";
+    private static final String SHORT_EVENT_COMMAND = "e";
+
 
     private static final String BY_DELIMITER = " /by ";
     private static final String FROM_DELIMITER = " /from ";
@@ -58,24 +69,30 @@ public class Parser {
         Scanner commandScanner = new Scanner(userPrompt);
         try {
             String command = commandScanner.next();
-            if (command.equals(Parser.BYE_COMMAND) || command.equals(Parser.LIST_COMMAND)) {
-                return createBasicCommand(command);
-            } else if (command.equals(Parser.MARK_COMMAND) || command.equals(Parser.UNMARK_COMMAND)
-                    || command.equals(Parser.DELETE_COMMAND)) {
-                return createNumberedCommand(command, commandScanner);
-            } else if (command.equals(Parser.FIND_COMMAND)) {
+            if (command.equals(Parser.BYE_COMMAND)) {
+                return createBasicCommand(Parser.BYE_COMMAND);
+            } else if (command.equals(Parser.LIST_COMMAND) || command.equals(Parser.SHORT_LIST_COMMAND)) {
+                return createBasicCommand(Parser.LIST_COMMAND);
+            } else if (command.equals(Parser.MARK_COMMAND) || command.equals(Parser.SHORT_MARK_COMMAND)) {
+                return createNumberedCommand(Parser.MARK_COMMAND, commandScanner);
+            } else if (command.equals(Parser.UNMARK_COMMAND) || command.equals(Parser.SHORT_UNMARK_COMMAND)) {
+                return createNumberedCommand(Parser.UNMARK_COMMAND, commandScanner);
+            } else if (command.equals(Parser.DELETE_COMMAND)) {
+                return createNumberedCommand(Parser.DELETE_COMMAND, commandScanner);
+            } else if (command.equals(Parser.FIND_COMMAND) || command.equals(Parser.SHORT_FIND_COMMAND)) {
                 return createFindCommand(commandScanner);
-            } else if (command.equals(Parser.TODO_COMMAND)) {
+            } else if (command.equals(Parser.TODO_COMMAND) || command.equals(Parser.SHORT_TODO_COMMAND)) {
                 return createToDoCommand(commandScanner);
-            } else if (command.equals(Parser.DEADLINE_COMMAND)) {
+            } else if (command.equals(Parser.DEADLINE_COMMAND) || command.equals(Parser.SHORT_DEADLINE_COMMAND)) {
                 return createDeadlineCommand(commandScanner);
-            } else if (command.equals(Parser.EVENT_COMMAND)) {
+            } else if (command.equals(Parser.EVENT_COMMAND) || command.equals(Parser.SHORT_EVENT_COMMAND)) {
                 return createEventCommand(commandScanner);
             } else {
                 // The user's prompt is not preceded by a valid command
                 throw new UnknownCommandException();
             }
         } catch (NoSuchElementException e) {
+            // The user inputted an empty command
             throw new UnknownCommandException();
         }
     }

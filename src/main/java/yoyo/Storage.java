@@ -29,12 +29,12 @@ public class Storage {
 
     private static final String DIRECTORY_NAME = "data";
     private static final String SAVEFILE_NAME = "memory.txt";
+    private static final String FILEPATH = Storage.DIRECTORY_NAME + "/" + Storage.SAVEFILE_NAME;
 
     private static final String PARSE_DELIMITER = "\\|";
 
     private static final String STORAGE_DATETIME_FORMAT = "yyyy-MM-dd HH:mm";
 
-    private final String filePath = Storage.DIRECTORY_NAME + "/" + Storage.SAVEFILE_NAME;
     private final DateTimeFormatter parseFormatter = DateTimeFormatter
             .ofPattern(Storage.STORAGE_DATETIME_FORMAT);
 
@@ -49,8 +49,8 @@ public class Storage {
      */
     public ArrayList<Task> load() throws MissingMemoryException {
         // Creates the data dir and memory.txt file if they do not exist
-        createDirectory(Storage.DIRECTORY_NAME);
-        File memory = createMemoryFile(filePath);
+        createDirectory();
+        File memory = createMemoryFile();
         return populateTaskList(memory);
     }
 
@@ -88,7 +88,7 @@ public class Storage {
      */
     public void updateMemory(TaskList tasksToSave) throws EditMemoryException {
         try {
-            FileWriter fw = new FileWriter(filePath);
+            FileWriter fw = new FileWriter(FILEPATH);
             for (int idx = 0; idx < tasksToSave.size(); idx++) {
                 Task taskToSave = tasksToSave.get(idx);
                 fw.write(taskToSave.getSaveString() + System.lineSeparator());
@@ -99,16 +99,16 @@ public class Storage {
         }
     }
 
-    private void createDirectory(String dirName) throws MissingMemoryException {
-        File dataDir = new File(dirName);
+    private void createDirectory() throws MissingMemoryException {
+        File dataDir = new File(Storage.DIRECTORY_NAME);
         dataDir.mkdir();
         if (!(dataDir.exists())) {
             throw new MissingMemoryException();
         }
     }
 
-    private File createMemoryFile(String filePath) throws MissingMemoryException {
-        File memory = new File(filePath);
+    private File createMemoryFile() throws MissingMemoryException {
+        File memory = new File(FILEPATH);
         try {
             memory.createNewFile();
         } catch (IOException e) {
