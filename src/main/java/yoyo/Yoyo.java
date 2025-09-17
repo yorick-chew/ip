@@ -39,8 +39,6 @@ public class Yoyo {
     private boolean isTerminated = false;
 
     /**
-     * Yoyo class
-     *
      * Instantiates a chatbot that manages a user's tasks.
      *
      * @throws MissingMemoryException If there was an error accessing the memory file for saving

@@ -23,6 +23,13 @@ public class ParserTest {
     }
 
     @Test
+    public void interpretCommand_shortListInput_success() throws Exception {
+        Parser testParser = new Parser();
+        Command command = testParser.interpretCommand("l");
+        assertEquals("list", command.getCommand());
+    }
+
+    @Test
     public void interpretCommand_markInput_success() throws Exception {
         Parser testParser = new Parser();
         Command command = testParser.interpretCommand("mark 3");
@@ -31,9 +38,25 @@ public class ParserTest {
     }
 
     @Test
+    public void interpretCommand_shortMarkInput_success() throws Exception {
+        Parser testParser = new Parser();
+        Command command = testParser.interpretCommand("m 3");
+        assertEquals("mark", command.getCommand());
+        assertEquals(3, command.getTaskNum());
+    }
+
+    @Test
     public void interpretCommand_unmarkInput_success() throws Exception {
         Parser testParser = new Parser();
         Command command = testParser.interpretCommand("unmark 4");
+        assertEquals("unmark", command.getCommand());
+        assertEquals(4, command.getTaskNum());
+    }
+
+    @Test
+    public void interpretCommand_shortUnmarkInput_success() throws Exception {
+        Parser testParser = new Parser();
+        Command command = testParser.interpretCommand("um 4");
         assertEquals("unmark", command.getCommand());
         assertEquals(4, command.getTaskNum());
     }
@@ -55,6 +78,14 @@ public class ParserTest {
     }
 
     @Test
+    public void interpretCommand_shortFindInput_success() throws Exception {
+        Parser testParser = new Parser();
+        Command command = testParser.interpretCommand("f books today");
+        assertEquals("find", command.getCommand());
+        assertEquals("books today", command.getDescription());
+    }
+
+    @Test
     public void interpretCommand_todoInput_success() throws Exception {
         Parser testParser = new Parser();
         Command command = testParser.interpretCommand("todo Important work");
@@ -63,11 +94,29 @@ public class ParserTest {
     }
 
     @Test
-    public void interpretCommand_deadlineInput_success() throws Exception {
+    public void interpretCommand_shortTodoInput_success() throws Exception {
+        Parser testParser = new Parser();
+        Command command = testParser.interpretCommand("t Important work");
+        assertEquals("todo", command.getCommand());
+        assertEquals("Important work", command.getDescription());
+    }
 
+    @Test
+    public void interpretCommand_deadlineInput_success() throws Exception {
         Parser testParser = new Parser();
         Command command = testParser.interpretCommand(
                 "deadline iP Week 3 /by 2025-08-29 16:00");
+        assertEquals("deadline", command.getCommand());
+        assertEquals("iP Week 3", command.getDescription());
+        assertEquals(LocalDateTime.of(2025, 8, 29,
+                16, 0), command.getDateOne());
+    }
+
+    @Test
+    public void interpretCommand_shortDeadlineInput_success() throws Exception {
+        Parser testParser = new Parser();
+        Command command = testParser.interpretCommand(
+                "d iP Week 3 /by 2025-08-29 16:00");
         assertEquals("deadline", command.getCommand());
         assertEquals("iP Week 3", command.getDescription());
         assertEquals(LocalDateTime.of(2025, 8, 29,
@@ -80,6 +129,21 @@ public class ParserTest {
         Parser testParser = new Parser();
         Command command = testParser.interpretCommand(
                 "event iP Week 3 /from 2025-08-25 00:00 "
+                        + "/to 2025-08-29 16:00");
+        assertEquals("event", command.getCommand());
+        assertEquals("iP Week 3", command.getDescription());
+        assertEquals(LocalDateTime.of(2025, 8, 25,
+                0, 0), command.getDateOne());
+        assertEquals(LocalDateTime.of(2025, 8, 29,
+                16, 0), command.getDateTwo());
+    }
+
+    @Test
+    public void interpretCommand_shortEventInput_success() throws Exception {
+
+        Parser testParser = new Parser();
+        Command command = testParser.interpretCommand(
+                "e iP Week 3 /from 2025-08-25 00:00 "
                         + "/to 2025-08-29 16:00");
         assertEquals("event", command.getCommand());
         assertEquals("iP Week 3", command.getDescription());

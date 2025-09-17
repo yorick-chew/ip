@@ -35,14 +35,6 @@ public class Event extends Task {
         this.to = to;
     }
 
-    protected LocalDateTime getFrom() {
-        return from;
-    }
-
-    protected LocalDateTime getTo() {
-        return to;
-    }
-
     /**
      * Returns the format used to save an Event in the
      * memory.txt file so that Yoyo will be able to retrieve it
@@ -88,5 +80,13 @@ public class Event extends Task {
         String formattedToDate = to.format(formatter);
         return "[E]" + super.toString() + " (from: " + formattedFromDate
                 + " to: " + formattedToDate + ")";
+    }
+
+    protected LocalDateTime getFrom() {
+        return from;
+    }
+
+    protected LocalDateTime getTo() {
+        return to;
     }
 }
