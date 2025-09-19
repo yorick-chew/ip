@@ -165,7 +165,7 @@ public class ParserTest {
     }
 
     @Test
-    public void interpretCommand_invalidInput_exceptionThrown() {
+    public void interpretCommand_invalidMarkInput_exceptionThrown() {
         try {
             Parser testParser = new Parser();
             Command command = testParser.interpretCommand("mark");
@@ -182,6 +182,10 @@ public class ParserTest {
             assertEquals("The user entered an invalid number as parameter for"
                     + "the mark, unmark or delete command.", e.getMessage());
         }
+    }
+
+    @Test
+    public void interpretCommand_invalidUnmarkInput_exceptionThrown() {
         try {
             Parser testParser = new Parser();
             Command command = testParser.interpretCommand("unmark");
@@ -198,6 +202,10 @@ public class ParserTest {
             assertEquals("The user entered an invalid number as parameter for"
                     + "the mark, unmark or delete command.", e.getMessage());
         }
+    }
+
+    @Test
+    public void interpretCommand_invalidDeleteInput_exceptionThrown() {
         try {
             Parser testParser = new Parser();
             Command command = testParser.interpretCommand("delete");
@@ -282,6 +290,10 @@ public class ParserTest {
             assertEquals("The user entered an incomplete command "
                     + "to create a deadline.", e.getMessage());
         }
+    }
+
+    @Test
+    public void interpretCommand_missingTaskNameAndDateDeadlineInput_exceptionThrown() {
         try {
             Parser testParser = new Parser();
             Command command = testParser.interpretCommand("deadline /by");
@@ -290,6 +302,10 @@ public class ParserTest {
             assertEquals("The user entered an incomplete command "
                     + "to create a deadline.", e.getMessage());
         }
+    }
+
+    @Test
+    public void interpretCommand_missingTaskNameDeadlineInput_exceptionThrown() {
         try {
             Parser testParser = new Parser();
             Command command = testParser.interpretCommand(
@@ -299,6 +315,10 @@ public class ParserTest {
             assertEquals("The user entered an incomplete command "
                     + "to create a deadline.", e.getMessage());
         }
+    }
+
+    @Test
+    public void interpretCommand_missingDateDeadlineInput_exceptionThrown() {
         try {
             Parser testParser = new Parser();
             Command command = testParser.interpretCommand("deadline x /by");
@@ -307,6 +327,10 @@ public class ParserTest {
             assertEquals("The user entered an incomplete command "
                     + "to create a deadline.", e.getMessage());
         }
+    }
+
+    @Test
+    public void interpretCommand_multipleDelimitersDeadlineInput_exceptionThrown() {
         try {
             Parser testParser = new Parser();
             Command command = testParser.interpretCommand("deadline /by /by 2025-08-29 18:00");
@@ -316,6 +340,7 @@ public class ParserTest {
                     + "to create a deadline.", e.getMessage());
         }
     }
+
     @Test
     public void interpretCommand_invalidEventInput_exceptionThrown() {
         try {
@@ -342,6 +367,10 @@ public class ParserTest {
             assertEquals("The user entered an incomplete command "
                     + "to create an event.", e.getMessage());
         }
+    }
+
+    @Test
+    public void interpretCommand_missingTaskNameEventInput_exceptionThrown() {
         try {
             Parser testParser = new Parser();
             Command command = testParser.interpretCommand("event /by 2025-08-29 16:00");
@@ -350,6 +379,10 @@ public class ParserTest {
             assertEquals("The user entered an incomplete command "
                     + "to create an event.", e.getMessage());
         }
+    }
+
+    @Test
+    public void interpretCommand_missingTaskNameAndDateEventInput_exceptionThrown() {
         try {
             Parser testParser = new Parser();
             Command command = testParser.interpretCommand("event /from");
@@ -358,6 +391,10 @@ public class ParserTest {
             assertEquals("The user entered an incomplete command "
                     + "to create an event.", e.getMessage());
         }
+    }
+
+    @Test
+    public void interpretCommand_invalidDelimiterEventInput_exceptionThrown() {
         try {
             Parser testParser = new Parser();
             Command command = testParser.interpretCommand("event / from");
@@ -366,6 +403,10 @@ public class ParserTest {
             assertEquals("The user entered an incomplete command "
                     + "to create an event.", e.getMessage());
         }
+    }
+
+    @Test
+    public void interpretCommand_multipleDelimitersEventInput_exceptionThrown() {
         try {
             Parser testParser = new Parser();
             Command command = testParser.interpretCommand("event /from /from /to 2025-08-29 16:00");
@@ -374,6 +415,10 @@ public class ParserTest {
             assertEquals("The user entered an incomplete command "
                     + "to create an event.", e.getMessage());
         }
+    }
+
+    @Test
+    public void interpretCommand_missingFromDateEventInput_exceptionThrown() {
         try {
             Parser testParser = new Parser();
             Command command = testParser.interpretCommand("event x /from ");
@@ -390,6 +435,10 @@ public class ParserTest {
             assertEquals("The user entered an incomplete command "
                     + "to create an event.", e.getMessage());
         }
+    }
+
+    @Test
+    public void interpretCommand_missingToDateEventInput_exceptionThrown() {
         try {
             Parser testParser = new Parser();
             Command command = testParser.interpretCommand("event x /from 2025-08-29 16:00 /to");
@@ -409,7 +458,7 @@ public class ParserTest {
     }
 
     @Test
-    public void interpretCommand_eventFromAfterToInput_exceptionThrown() {
+    public void interpretCommand_eventFromDateAfterToDateInput_exceptionThrown() {
         try {
             Parser testParser = new Parser();
             Command command = testParser.interpretCommand(

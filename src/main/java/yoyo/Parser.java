@@ -69,6 +69,9 @@ public class Parser {
         Scanner commandScanner = new Scanner(userPrompt);
         try {
             String command = commandScanner.next();
+            // ChatGPT consulted to make the code shorter by combining commands with similar inputs
+            // into the same create command method. For example, createBasicCommand for commands with
+            // no additional arguments.
             if (command.equals(Parser.BYE_COMMAND)) {
                 return createBasicCommand(Parser.BYE_COMMAND);
             } else if (command.equals(Parser.LIST_COMMAND) || command.equals(Parser.SHORT_LIST_COMMAND)) {

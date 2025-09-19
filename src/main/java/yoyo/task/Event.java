@@ -62,6 +62,7 @@ public class Event extends Task {
      */
     @Override
     public boolean equals(Object obj) {
+        // Solution below adapted from https://nus-cs2030s.github.io/2425-s1/14-polymorphism.html#the-equals-method
         if (obj instanceof Event) {
             Event event = (Event) obj;
             boolean isDescriptionEqual = event.getDescription().equals(this.getDescription());

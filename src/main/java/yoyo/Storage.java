@@ -170,7 +170,11 @@ public class Storage {
         LocalDateTime fromDate = LocalDateTime.parse(from, parseFormatter);
         LocalDateTime toDate = LocalDateTime.parse(to, parseFormatter);
         try {
-            return new Event(description, fromDate, toDate);
+            Event newEvent = new Event(description, fromDate, toDate);
+            if (isMarked) {
+                newEvent.markAsDone();
+            }
+            return newEvent;
         } catch (InvalidEventException e) {
             // Do nothing as a correct memory.txt file will have only recorded
             // valid events, assuming that no user edited this file.

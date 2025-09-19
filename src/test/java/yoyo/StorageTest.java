@@ -49,6 +49,7 @@ public class StorageTest {
         LocalDateTime dateFrom = LocalDateTime.of(2025, 2, 1, 16, 0);
         LocalDateTime dateTo = LocalDateTime.of(2025, 2, 1, 18, 0);
         Event newEvent = new Event("Networking Event @ NUS", dateFrom, dateTo);
+        newEvent.markAsDone();
 
         assertEquals(newEvent, parsedTask);
     }

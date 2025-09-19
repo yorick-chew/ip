@@ -53,6 +53,7 @@ public class Deadline extends Task {
      */
     @Override
     public boolean equals(Object obj) {
+        // Solution below adapted from https://nus-cs2030s.github.io/2425-s1/14-polymorphism.html#the-equals-method
         if (obj instanceof Deadline) {
             Deadline deadline = (Deadline) obj;
             boolean isDescriptionEqual = deadline.getDescription().equals(this.getDescription());
