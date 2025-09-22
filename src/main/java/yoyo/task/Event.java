@@ -56,7 +56,7 @@ public class Event extends Task {
      * Returns true if obj is also an Event and shares the
      * same description, from and to fields as this Event object.
      *
-     * @param obj   The reference object with which to compare.
+     * @param obj The reference object with which to compare.
      * @return True if both objects are Events that share the same fields
      *         for description, from and to.
      */

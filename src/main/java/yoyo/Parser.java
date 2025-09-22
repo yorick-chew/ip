@@ -62,6 +62,7 @@ public class Parser {
      * @throws UnknownCommandException If the userPrompt provides an invalid command.
      * @throws InvalidTaskException If the userPrompt provides an incomplete
      *                              mark, unmark or delete command.
+     * @throws InvalidFindException If the userPrompt provides an incomplete find command.
      */
     public Command interpretCommand(String userPrompt) throws InvalidToDoException,
             InvalidDeadlineException, InvalidEventException, UnknownCommandException,
@@ -72,28 +73,22 @@ public class Parser {
             // ChatGPT consulted to make the code shorter by combining commands with similar inputs
             // into the same create command method. For example, createBasicCommand for commands with
             // no additional arguments.
-            if (command.equals(Parser.BYE_COMMAND)) {
-                return createBasicCommand(Parser.BYE_COMMAND);
-            } else if (command.equals(Parser.LIST_COMMAND) || command.equals(Parser.SHORT_LIST_COMMAND)) {
-                return createBasicCommand(Parser.LIST_COMMAND);
-            } else if (command.equals(Parser.MARK_COMMAND) || command.equals(Parser.SHORT_MARK_COMMAND)) {
-                return createNumberedCommand(Parser.MARK_COMMAND, commandScanner);
-            } else if (command.equals(Parser.UNMARK_COMMAND) || command.equals(Parser.SHORT_UNMARK_COMMAND)) {
-                return createNumberedCommand(Parser.UNMARK_COMMAND, commandScanner);
-            } else if (command.equals(Parser.DELETE_COMMAND)) {
-                return createNumberedCommand(Parser.DELETE_COMMAND, commandScanner);
-            } else if (command.equals(Parser.FIND_COMMAND) || command.equals(Parser.SHORT_FIND_COMMAND)) {
-                return createFindCommand(commandScanner);
-            } else if (command.equals(Parser.TODO_COMMAND) || command.equals(Parser.SHORT_TODO_COMMAND)) {
-                return createToDoCommand(commandScanner);
-            } else if (command.equals(Parser.DEADLINE_COMMAND) || command.equals(Parser.SHORT_DEADLINE_COMMAND)) {
-                return createDeadlineCommand(commandScanner);
-            } else if (command.equals(Parser.EVENT_COMMAND) || command.equals(Parser.SHORT_EVENT_COMMAND)) {
-                return createEventCommand(commandScanner);
-            } else {
-                // The user's prompt is not preceded by a valid command
-                throw new UnknownCommandException();
-            }
+            // The user's prompt is not preceded by a valid command
+            return switch (command) {
+                case Parser.BYE_COMMAND -> createBasicCommand(Parser.BYE_COMMAND);
+                case Parser.LIST_COMMAND, Parser.SHORT_LIST_COMMAND -> createBasicCommand(Parser.LIST_COMMAND);
+                case Parser.MARK_COMMAND, Parser.SHORT_MARK_COMMAND ->
+                        createNumberedCommand(Parser.MARK_COMMAND, commandScanner);
+                case Parser.UNMARK_COMMAND, Parser.SHORT_UNMARK_COMMAND ->
+                        createNumberedCommand(Parser.UNMARK_COMMAND, commandScanner);
+                case Parser.DELETE_COMMAND -> createNumberedCommand(Parser.DELETE_COMMAND, commandScanner);
+                case Parser.FIND_COMMAND, Parser.SHORT_FIND_COMMAND -> createFindCommand(commandScanner);
+                case Parser.TODO_COMMAND, Parser.SHORT_TODO_COMMAND -> createToDoCommand(commandScanner);
+                case Parser.DEADLINE_COMMAND, Parser.SHORT_DEADLINE_COMMAND ->
+                        createDeadlineCommand(commandScanner);
+                case Parser.EVENT_COMMAND, Parser.SHORT_EVENT_COMMAND -> createEventCommand(commandScanner);
+                default -> throw new UnknownCommandException();
+            };
         } catch (NoSuchElementException e) {
             // The user inputted an empty command
             throw new UnknownCommandException();

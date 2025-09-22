@@ -51,7 +51,9 @@ public class Yoyo {
         trackedTasks = new TaskList(storage.load());
     }
 
-    /** Returns Yoyo's welcome greeting when the user begins using Yoyo. */
+    /**
+     * Returns Yoyo's welcome greeting when the user begins using Yoyo.
+     */
     public String getGreeting() {
         return formatResponse("Yo! The name's Yoyo.", "What can I do for you?");
     }
@@ -92,12 +94,16 @@ public class Yoyo {
         }
     }
 
-    /** Indicates if the chatbot program has been terminated by the user's command 'bye'. */
+    /**
+     * Indicates if the chatbot program has been terminated by the user's command 'bye'.
+     */
     public boolean isTerminated() {
         return isTerminated;
     }
 
-    /** Executes the corresponding userCommand and generates Yoyo's response **/
+    /**
+     * Executes the corresponding userCommand and generates Yoyo's response.
+     */
     private String executeCommand(Command userCommand) throws InvalidTaskException, EditMemoryException,
             InvalidEventException, UnknownCommandException {
         String commandType = userCommand.getCommand();
@@ -149,7 +155,7 @@ public class Yoyo {
         Task task = removeTask(taskNum);
         assert task != null : "Removed task should not be null";
         return formatResponse("Gotcha, it's gone! I've deleted this task:", "   " + task,
-                "Now you have " + numOfTasks() + " task(s) in the list.");
+                "Now you have " + getNumOfTasks() + " task(s) in the list.");
     }
 
     private String executeFindCommand(Command userCommand) {
@@ -166,7 +172,7 @@ public class Yoyo {
         String description = userCommand.getDescription();
         Task task = addTask(description);
         return formatResponse("Alright-y, I've added your task:", "   " + task, "Now you have "
-                + numOfTasks() + " task(s) in the list.");
+                + getNumOfTasks() + " task(s) in the list.");
     }
 
     private String executeDeadlineCommand(Command userCommand) throws EditMemoryException {
@@ -175,7 +181,7 @@ public class Yoyo {
         LocalDateTime byDate = userCommand.getDateOne();
         Task task = addTask(description, byDate);
         return formatResponse("Alright-y, I've added your task:", "   " + task, "Now you have "
-                + numOfTasks() + " task(s) in the list.");
+                + getNumOfTasks() + " task(s) in the list.");
     }
 
     private String executeEventCommand(Command userCommand) throws EditMemoryException, InvalidEventException {
@@ -185,20 +191,24 @@ public class Yoyo {
         LocalDateTime toDate = userCommand.getDateTwo();
         Task task = addTask(description, fromDate, toDate);
         return formatResponse("Alright-y, I've added your task:", "   " + task, "Now you have "
-                + numOfTasks() + " task(s) in the list.");
+                + getNumOfTasks() + " task(s) in the list.");
     }
 
-    /** Formats the given list into Yoyo's response format **/
+    /**
+     * Formats the given list into Yoyo's response format.
+     */
     private String getListedResponse(TaskList tasksToList) {
         // Yoyo lists out what it wrote in the list
         String response = "";
-        for (int idx = 0; idx < tasksToList.size(); idx++) {
+        for (int idx = 0; idx < tasksToList.getSize(); idx++) {
             response += (idx + 1) + ". " + tasksToList.get(idx) + "\n";
         }
         return response;
     }
 
-    /** Formats each string in responseLines into its own line in Yoyo's response **/
+    /**
+     * Formats each string in responseLines into its own line in Yoyo's response.
+     */
     private String formatResponse(String... responseLines) {
         String response = "";
         for (String responseLine : responseLines) {
@@ -250,7 +260,7 @@ public class Yoyo {
         return task;
     }
 
-    private int numOfTasks() {
-        return trackedTasks.size();
+    private int getNumOfTasks() {
+        return trackedTasks.getSize();
     }
 }

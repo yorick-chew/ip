@@ -157,7 +157,7 @@ public class ParserTest {
     public void interpretCommand_unknownInput_exceptionThrown() {
         try {
             Parser testParser = new Parser();
-            Command command = testParser.interpretCommand("blah");
+            testParser.interpretCommand("blah");
             fail();
         } catch (Exception e) {
             assertEquals("The user entered an unknown command.", e.getMessage());
@@ -168,7 +168,7 @@ public class ParserTest {
     public void interpretCommand_invalidMarkInput_exceptionThrown() {
         try {
             Parser testParser = new Parser();
-            Command command = testParser.interpretCommand("mark");
+            testParser.interpretCommand("mark");
             fail();
         } catch (Exception e) {
             assertEquals("The user entered an invalid number as parameter for"
@@ -176,7 +176,7 @@ public class ParserTest {
         }
         try {
             Parser testParser = new Parser();
-            Command command = testParser.interpretCommand("mark ");
+            testParser.interpretCommand("mark ");
             fail();
         } catch (Exception e) {
             assertEquals("The user entered an invalid number as parameter for"
@@ -188,7 +188,7 @@ public class ParserTest {
     public void interpretCommand_invalidUnmarkInput_exceptionThrown() {
         try {
             Parser testParser = new Parser();
-            Command command = testParser.interpretCommand("unmark");
+            testParser.interpretCommand("unmark");
             fail();
         } catch (Exception e) {
             assertEquals("The user entered an invalid number as parameter for"
@@ -196,7 +196,7 @@ public class ParserTest {
         }
         try {
             Parser testParser = new Parser();
-            Command command = testParser.interpretCommand("unmark ");
+            testParser.interpretCommand("unmark ");
             fail();
         } catch (Exception e) {
             assertEquals("The user entered an invalid number as parameter for"
@@ -208,7 +208,7 @@ public class ParserTest {
     public void interpretCommand_invalidDeleteInput_exceptionThrown() {
         try {
             Parser testParser = new Parser();
-            Command command = testParser.interpretCommand("delete");
+            testParser.interpretCommand("delete");
             fail();
         } catch (Exception e) {
             assertEquals("The user entered an invalid number as parameter for"
@@ -216,7 +216,7 @@ public class ParserTest {
         }
         try {
             Parser testParser = new Parser();
-            Command command = testParser.interpretCommand("delete ");
+            testParser.interpretCommand("delete ");
             fail();
         } catch (Exception e) {
             assertEquals("The user entered an invalid number as parameter for"
@@ -228,7 +228,7 @@ public class ParserTest {
     public void interpretCommand_invalidFindInput_exceptionThrown() {
         try {
             Parser testParser = new Parser();
-            Command command = testParser.interpretCommand("find");
+            testParser.interpretCommand("find");
             fail();
         } catch (Exception e) {
             assertEquals("The user entered an incomplete command to "
@@ -236,7 +236,7 @@ public class ParserTest {
         }
         try {
             Parser testParser = new Parser();
-            Command command = testParser.interpretCommand("find ");
+            testParser.interpretCommand("find ");
             fail();
         } catch (Exception e) {
             assertEquals("The user entered an incomplete command to "
@@ -248,7 +248,7 @@ public class ParserTest {
     public void interpretCommand_invalidToDoInput_exceptionThrown() {
         try {
             Parser testParser = new Parser();
-            Command command = testParser.interpretCommand("todo");
+            testParser.interpretCommand("todo");
             fail();
         } catch (Exception e) {
             assertEquals("The user entered an incomplete command "
@@ -256,7 +256,7 @@ public class ParserTest {
         }
         try {
             Parser testParser = new Parser();
-            Command command = testParser.interpretCommand("todo ");
+            testParser.interpretCommand("todo ");
             fail();
         } catch (Exception e) {
             assertEquals("The user entered an incomplete command "
@@ -268,7 +268,7 @@ public class ParserTest {
     public void interpretCommand_invalidDeadlineInput_exceptionThrown() {
         try {
             Parser testParser = new Parser();
-            Command command = testParser.interpretCommand("deadline");
+            testParser.interpretCommand("deadline");
             fail();
         } catch (Exception e) {
             assertEquals("The user entered an incomplete command "
@@ -276,7 +276,7 @@ public class ParserTest {
         }
         try {
             Parser testParser = new Parser();
-            Command command = testParser.interpretCommand("deadline ");
+            testParser.interpretCommand("deadline ");
             fail();
         } catch (Exception e) {
             assertEquals("The user entered an incomplete command "
@@ -284,7 +284,7 @@ public class ParserTest {
         }
         try {
             Parser testParser = new Parser();
-            Command command = testParser.interpretCommand("deadline  ");
+            testParser.interpretCommand("deadline  ");
             fail();
         } catch (Exception e) {
             assertEquals("The user entered an incomplete command "
@@ -296,7 +296,7 @@ public class ParserTest {
     public void interpretCommand_missingTaskNameAndDateDeadlineInput_exceptionThrown() {
         try {
             Parser testParser = new Parser();
-            Command command = testParser.interpretCommand("deadline /by");
+            testParser.interpretCommand("deadline /by");
             fail();
         } catch (Exception e) {
             assertEquals("The user entered an incomplete command "
@@ -308,7 +308,7 @@ public class ParserTest {
     public void interpretCommand_missingTaskNameDeadlineInput_exceptionThrown() {
         try {
             Parser testParser = new Parser();
-            Command command = testParser.interpretCommand(
+            testParser.interpretCommand(
                     "deadline /by 2025-08-29 18:00");
             fail();
         } catch (Exception e) {
@@ -321,7 +321,7 @@ public class ParserTest {
     public void interpretCommand_missingDateDeadlineInput_exceptionThrown() {
         try {
             Parser testParser = new Parser();
-            Command command = testParser.interpretCommand("deadline x /by");
+            testParser.interpretCommand("deadline x /by");
             fail();
         } catch (Exception e) {
             assertEquals("The user entered an incomplete command "
@@ -333,7 +333,7 @@ public class ParserTest {
     public void interpretCommand_multipleDelimitersDeadlineInput_exceptionThrown() {
         try {
             Parser testParser = new Parser();
-            Command command = testParser.interpretCommand("deadline /by /by 2025-08-29 18:00");
+            testParser.interpretCommand("deadline /by /by 2025-08-29 18:00");
             fail();
         } catch (Exception e) {
             assertEquals("The user entered an incomplete command "
@@ -345,7 +345,7 @@ public class ParserTest {
     public void interpretCommand_invalidEventInput_exceptionThrown() {
         try {
             Parser testParser = new Parser();
-            Command command = testParser.interpretCommand("event");
+            testParser.interpretCommand("event");
             fail();
         } catch (Exception e) {
             assertEquals("The user entered an incomplete command "
@@ -353,7 +353,7 @@ public class ParserTest {
         }
         try {
             Parser testParser = new Parser();
-            Command command = testParser.interpretCommand("event ");
+            testParser.interpretCommand("event ");
             fail();
         } catch (Exception e) {
             assertEquals("The user entered an incomplete command "
@@ -361,7 +361,7 @@ public class ParserTest {
         }
         try {
             Parser testParser = new Parser();
-            Command command = testParser.interpretCommand("event  ");
+            testParser.interpretCommand("event  ");
             fail();
         } catch (Exception e) {
             assertEquals("The user entered an incomplete command "
@@ -373,7 +373,7 @@ public class ParserTest {
     public void interpretCommand_missingTaskNameEventInput_exceptionThrown() {
         try {
             Parser testParser = new Parser();
-            Command command = testParser.interpretCommand("event /by 2025-08-29 16:00");
+            testParser.interpretCommand("event /by 2025-08-29 16:00");
             fail();
         } catch (Exception e) {
             assertEquals("The user entered an incomplete command "
@@ -385,7 +385,7 @@ public class ParserTest {
     public void interpretCommand_missingTaskNameAndDateEventInput_exceptionThrown() {
         try {
             Parser testParser = new Parser();
-            Command command = testParser.interpretCommand("event /from");
+            testParser.interpretCommand("event /from");
             fail();
         } catch (Exception e) {
             assertEquals("The user entered an incomplete command "
@@ -397,7 +397,7 @@ public class ParserTest {
     public void interpretCommand_invalidDelimiterEventInput_exceptionThrown() {
         try {
             Parser testParser = new Parser();
-            Command command = testParser.interpretCommand("event / from");
+            testParser.interpretCommand("event / from");
             fail();
         } catch (Exception e) {
             assertEquals("The user entered an incomplete command "
@@ -409,7 +409,7 @@ public class ParserTest {
     public void interpretCommand_multipleDelimitersEventInput_exceptionThrown() {
         try {
             Parser testParser = new Parser();
-            Command command = testParser.interpretCommand("event /from /from /to 2025-08-29 16:00");
+            testParser.interpretCommand("event /from /from /to 2025-08-29 16:00");
             fail();
         } catch (Exception e) {
             assertEquals("The user entered an incomplete command "
@@ -421,7 +421,7 @@ public class ParserTest {
     public void interpretCommand_missingFromDateEventInput_exceptionThrown() {
         try {
             Parser testParser = new Parser();
-            Command command = testParser.interpretCommand("event x /from ");
+            testParser.interpretCommand("event x /from ");
             fail();
         } catch (Exception e) {
             assertEquals("The user entered an incomplete command "
@@ -429,7 +429,7 @@ public class ParserTest {
         }
         try {
             Parser testParser = new Parser();
-            Command command = testParser.interpretCommand("event x /from  ");
+            testParser.interpretCommand("event x /from  ");
             fail();
         } catch (Exception e) {
             assertEquals("The user entered an incomplete command "
@@ -441,7 +441,7 @@ public class ParserTest {
     public void interpretCommand_missingToDateEventInput_exceptionThrown() {
         try {
             Parser testParser = new Parser();
-            Command command = testParser.interpretCommand("event x /from 2025-08-29 16:00 /to");
+            testParser.interpretCommand("event x /from 2025-08-29 16:00 /to");
             fail();
         } catch (Exception e) {
             assertEquals("The user entered an incomplete command "
@@ -449,7 +449,7 @@ public class ParserTest {
         }
         try {
             Parser testParser = new Parser();
-            Command command = testParser.interpretCommand("event x /from 2025-08-29 16:00 /to ");
+            testParser.interpretCommand("event x /from 2025-08-29 16:00 /to ");
             fail();
         } catch (Exception e) {
             assertEquals("The user entered an incomplete command "
@@ -461,8 +461,7 @@ public class ParserTest {
     public void interpretCommand_eventFromDateAfterToDateInput_exceptionThrown() {
         try {
             Parser testParser = new Parser();
-            Command command = testParser.interpretCommand(
-                    "event /from 2025-08-29 16:00 /to 2025-08-29 15:00");
+            testParser.interpretCommand("event /from 2025-08-29 16:00 /to 2025-08-29 15:00");
             fail();
         } catch (Exception e) {
             assertEquals("The user entered an incomplete command "

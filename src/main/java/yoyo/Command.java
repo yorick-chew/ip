@@ -14,8 +14,8 @@ public class Command {
     private int taskNum;
 
     /**
-     * Instantiates either a bye, list or delete command depending
-     * parameter.
+     * Instantiates either a bye or list command depending on the
+     * command parameter.
      *
      * @param command A string that identifies the command.
      */
@@ -24,8 +24,8 @@ public class Command {
     }
 
     /**
-     * Instantiates either a mark or unmark command depending
-     * parameter.
+     * Instantiates either a mark, unmark or delete command depending on the
+     * command parameter.
      *
      * @param command A string that identifies the command.
      * @param taskNum The index of the selected task, starting from 1.
@@ -36,10 +36,11 @@ public class Command {
     }
 
     /**
-     * Instantiates a todo command.
+     * Instantiates a todo or find command depending on the command
+     * parameter.
      *
      * @param command A string that identifies the command.
-     * @param description The details of the todo task.
+     * @param description The details of the todo task or keyword.
      */
     public Command(String command, String description) {
         this.command = command;
